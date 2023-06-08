@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author hahaha
- * @since 2023-06-06 01:54:17
+ * @since 2023-06-08 07:25:48
  */
 public interface ReviewMapper extends BaseMapper<Review> {
 

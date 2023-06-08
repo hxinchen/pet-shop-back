@@ -3,6 +3,7 @@ package com.example.petshopback.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,7 +13,7 @@ import lombok.Setter;
  * </p>
  *
  * @author hahaha
- * @since 2023-06-06 01:52:14
+ * @since 2023-06-08 07:25:48
  */
 @Getter
 @Setter
@@ -34,7 +35,7 @@ public class Order implements Serializable {
     private Double sumPrice;
 
     /**
-     * 用户id
+     * 会员id
      */
     private Integer userId;
 
@@ -42,4 +43,19 @@ public class Order implements Serializable {
      * 订单状态
      */
     private Byte status;
+
+    /**
+     * 取消时间
+     */
+    private LocalDateTime cancelTime;
+
+    /**
+     * 商家id
+     */
+    private Integer businessId;
+
+    /**
+     * 地址id
+     */
+    private Integer addressId;
 }

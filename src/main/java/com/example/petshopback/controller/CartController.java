@@ -5,14 +5,14 @@ import org.springframework.stereotype.Controller;
 
 /**
  * <p>
- * 	商店表 前端控制器
+ * 购物车表 前端控制器
  * </p>
  *
  * @author hahaha
  * @since 2023-06-08 07:25:48
  */
 @Controller
-@RequestMapping("/shop")
-public class ShopController {
+@RequestMapping("/cart")
+public class CartController {
 
 }

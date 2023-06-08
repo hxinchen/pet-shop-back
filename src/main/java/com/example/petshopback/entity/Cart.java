@@ -8,7 +8,7 @@ import lombok.Setter;
 
 /**
  * <p>
- * 视频表
+ * 购物车表
  * </p>
  *
  * @author hahaha
@@ -16,7 +16,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class Video implements Serializable {
+public class Cart implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -24,17 +24,22 @@ public class Video implements Serializable {
     private Integer id;
 
     /**
-     * 宠物id
+     * 用户id
      */
-    private Integer petId;
+    private Integer userId;
 
     /**
-     * 视频链接
+     * 商品id
      */
-    private String videoUrl;
+    private Integer productId;
 
     /**
-     * 视频名称
+     * 商品数量
      */
-    private String videoName;
+    private Integer count;
+
+    /**
+     * 是否选中
+     */
+    private Boolean checked;
 }

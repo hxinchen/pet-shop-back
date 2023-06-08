@@ -12,7 +12,7 @@ import lombok.Setter;
  * </p>
  *
  * @author hahaha
- * @since 2023-06-06 01:48:58
+ * @since 2023-06-08 07:25:48
  */
 @Getter
 @Setter
@@ -37,4 +37,9 @@ public class Favor implements Serializable {
      * 产品id
      */
     private Integer productId;
+
+    /**
+     * 创建时间
+     */
+    private String createTime;
 }

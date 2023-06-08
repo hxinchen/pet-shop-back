@@ -12,7 +12,7 @@ import lombok.Setter;
  * </p>
  *
  * @author hahaha
- * @since 2023-06-06 01:54:17
+ * @since 2023-06-08 07:25:48
  */
 @Getter
 @Setter
@@ -47,4 +47,9 @@ public class Review implements Serializable {
      * 订单id
      */
     private Integer orderId;
+
+    /**
+     * 发出评价的时间
+     */
+    private String createTime;
 }

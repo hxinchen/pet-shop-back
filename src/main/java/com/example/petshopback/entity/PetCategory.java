@@ -13,7 +13,7 @@ import lombok.Setter;
  * </p>
  *
  * @author hahaha
- * @since 2023-06-06 01:53:06
+ * @since 2023-06-08 07:25:48
  */
 @Getter
 @Setter
@@ -29,4 +29,9 @@ public class PetCategory implements Serializable {
      * 宠物类别名称
      */
     private String name;
+
+    /**
+     * 是否可用0--不可用 1--可用
+     */
+    private Boolean useful;
 }

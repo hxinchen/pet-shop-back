@@ -12,7 +12,7 @@ import lombok.Setter;
  * </p>
  *
  * @author hahaha
- * @since 2023-06-06 01:54:45
+ * @since 2023-06-08 07:25:48
  */
 @Getter
 @Setter
@@ -60,4 +60,9 @@ public class User implements Serializable {
      * 是否管理员0-不是--1-是
      */
     private Boolean isAdmin;
+
+    /**
+     * 是否商家0-不是--1-是
+     */
+    private Boolean isBusiness;
 }

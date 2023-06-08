@@ -12,7 +12,7 @@ import lombok.Setter;
  * </p>
  *
  * @author hahaha
- * @since 2023-06-06 01:54:30
+ * @since 2023-06-08 07:25:48
  */
 @Getter
 @Setter
@@ -44,4 +44,9 @@ public class Shop implements Serializable {
      * 详细地址
      */
     private String detailAddress;
+
+    /**
+     * 商家id
+     */
+    private Integer userId;
 }

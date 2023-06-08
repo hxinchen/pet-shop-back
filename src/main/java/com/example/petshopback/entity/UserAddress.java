@@ -13,7 +13,7 @@ import lombok.Setter;
  * </p>
  *
  * @author hahaha
- * @since 2023-06-06 01:54:55
+ * @since 2023-06-08 07:25:48
  */
 @Getter
 @Setter
@@ -52,4 +52,9 @@ public class UserAddress implements Serializable {
      * 详细地址
      */
     private String detail;
+
+    /**
+     * 标签
+     */
+    private String tag;
 }

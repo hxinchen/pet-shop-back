@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author hahaha
- * @since 2023-06-06 01:53:06
+ * @since 2023-06-08 07:25:48
  */
 @Service
 public class PetCategoryServiceImpl extends ServiceImpl<PetCategoryMapper, PetCategory> implements PetCategoryService {

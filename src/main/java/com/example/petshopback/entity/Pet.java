@@ -13,7 +13,7 @@ import lombok.Setter;
  * </p>
  *
  * @author hahaha
- * @since 2023-06-06 01:52:52
+ * @since 2023-06-08 07:25:48
  */
 @Getter
 @Setter
@@ -73,4 +73,14 @@ public class Pet implements Serializable {
      * 图片url
      */
     private String img;
+
+    /**
+     * 所属店商店id
+     */
+    private Integer shopId;
+
+    /**
+     * 视频id
+     */
+    private Integer videoId;
 }
