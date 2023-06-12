@@ -3,6 +3,10 @@ package com.example.petshopback.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
+
+import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,42 +16,53 @@ import lombok.Setter;
  * </p>
  *
  * @author hahaha
- * @since 2023-06-06 01:53:20
+ * @since 2023-06-09 10:14:35
  */
 @Getter
 @Setter
-public class Product implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    /**
-     * 产品唯一主键id
-     */
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+@TableName("product")
+@ApiModel(value = "Product", description = "产品实体")
+public class Product extends BaseEntity implements Serializable {
 
     /**
      * 产品类型
      */
+    @ApiModelProperty(value = "产品类型")
     private Integer categoryId;
 
     /**
      * 产品名称
      */
+    @ApiModelProperty(value = "产品名称")
     private String name;
 
     /**
      * 产品描述
      */
+    @ApiModelProperty(value = "产品描述")
     private String describle;
 
     /**
      * 产品单价
      */
+    @ApiModelProperty(value = "产品单价")
     private Double price;
 
     /**
      * 产品图片
      */
+    @ApiModelProperty(value = "产品图片")
     private String img;
+
+    /**
+     * 所属商店id
+     */
+    @ApiModelProperty(value = "所属商店id")
+    private Integer shopId;
+
+    /**
+     * 产品库存
+     */
+    @ApiModelProperty(value = "产品库存")
+    private Integer stock;
 }

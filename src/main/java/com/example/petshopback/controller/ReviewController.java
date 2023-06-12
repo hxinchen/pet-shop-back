@@ -2,6 +2,7 @@ package com.example.petshopback.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
@@ -9,9 +10,9 @@ import org.springframework.stereotype.Controller;
  * </p>
  *
  * @author hahaha
- * @since 2023-06-06 01:54:17
+ * @since 2023-06-09 10:14:35
  */
-@Controller
+@RestController
 @RequestMapping("/review")
 public class ReviewController {
 
