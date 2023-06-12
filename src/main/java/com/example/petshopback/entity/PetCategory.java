@@ -4,6 +4,9 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,25 +16,30 @@ import lombok.Setter;
  * </p>
  *
  * @author hahaha
- * @since 2023-06-08 07:25:48
+ * @since 2023-06-09 10:14:35
  */
 @Getter
 @Setter
 @TableName("pet_category")
-public class PetCategory implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+@ApiModel(value = "PetCategory", description = "宠物类别实体")
+public class PetCategory extends BaseEntity implements Serializable {
 
     /**
      * 宠物类别名称
      */
+    @ApiModelProperty(value = "宠物类别名称")
     private String name;
 
     /**
      * 是否可用0--不可用 1--可用
      */
+    @ApiModelProperty(value = "是否可用，0--不可用，1--可用")
     private Boolean useful;
+
+    /**
+     * 图片url
+     */
+    @ApiModelProperty(value = "图片url")
+    private String img;
+
 }

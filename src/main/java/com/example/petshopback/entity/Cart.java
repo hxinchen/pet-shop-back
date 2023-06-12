@@ -1,8 +1,11 @@
 package com.example.petshopback.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
+
 import java.io.Serializable;
+
+import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,34 +15,34 @@ import lombok.Setter;
  * </p>
  *
  * @author hahaha
- * @since 2023-06-08 07:25:48
+ * @since 2023-06-09 10:14:35
  */
 @Getter
 @Setter
-public class Cart implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
-
+@TableName("cart")
+@ApiModel(value = "Cart", description = "购物车实体")
+public class Cart extends BaseEntity implements Serializable {
     /**
      * 用户id
      */
+    @ApiModelProperty(value = "用户id")
     private Integer userId;
 
     /**
      * 商品id
      */
+    @ApiModelProperty(value = "商品id")
     private Integer productId;
 
     /**
      * 商品数量
      */
+    @ApiModelProperty(value = "商品数量")
     private Integer count;
 
     /**
      * 是否选中
      */
+    @ApiModelProperty(value = "是否选中")
     private Boolean checked;
 }

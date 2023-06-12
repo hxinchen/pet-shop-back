@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author hahaha
- * @since 2023-06-08 07:25:48
+ * @since 2023-06-09 10:14:35
  */
 @Service
 public class FavorServiceImpl extends ServiceImpl<FavorMapper, Favor> implements FavorService {
