@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-@MapperScan("com.example.petshop.mapper")
+@MapperScan("com.example.petshopback.mapper")
 public class MybatisPlusConfig {
 
     @Bean
