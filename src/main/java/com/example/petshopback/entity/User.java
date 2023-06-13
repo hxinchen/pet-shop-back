@@ -58,7 +58,7 @@ public class User extends BaseEntity implements Serializable {
      * 创建时间
      */
     @ApiModelProperty(value = "创建时间")
-    private String createaTime;
+    private String createTime;
 
     /**
      * 是否管理员0-不是--1-是
