@@ -28,7 +28,7 @@ public class Shop extends BaseEntity implements Serializable {
      * 商店名称
      */
     @ApiModelProperty(value = "商店名称")
-    private String shopName;
+    private String name;
 
     /**
      * 商店纬度

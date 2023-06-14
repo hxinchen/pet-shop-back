@@ -1,5 +1,7 @@
 package com.example.petshopback.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.petshopback.entity.Pet;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,4 +15,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface PetService extends IService<Pet> {
 
+    boolean addPet(Pet pet);
+
+    Page<Pet> getByCategory(Integer pageNum, Integer pageSize, Integer category);
+
+
+    boolean deleteByIds(String ids);
 }

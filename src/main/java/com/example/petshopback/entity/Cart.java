@@ -45,4 +45,6 @@ public class Cart extends BaseEntity implements Serializable {
      */
     @ApiModelProperty(value = "是否选中")
     private Boolean checked;
+
+
 }

@@ -28,6 +28,12 @@ import lombok.Setter;
 public class Order extends BaseEntity implements Delayed {
 
     /**
+     * 订单编号
+     */
+    @ApiModelProperty(value = "订单编号")
+    private String no;
+
+    /**
      * 创建时间
      */
     @ApiModelProperty(value = "创建时间")
