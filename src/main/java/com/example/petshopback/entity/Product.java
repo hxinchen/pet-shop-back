@@ -1,7 +1,5 @@
 package com.example.petshopback.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -40,7 +38,7 @@ public class Product extends BaseEntity implements Serializable {
      * 产品描述
      */
     @ApiModelProperty(value = "产品描述")
-    private String describle;
+    private String description;
 
     /**
      * 产品单价
