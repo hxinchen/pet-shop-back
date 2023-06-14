@@ -23,7 +23,6 @@ public class PetCategoryServiceImpl extends ServiceImpl<PetCategoryMapper, PetCa
     public List<PetCategory> getAllCate() {
 
         QueryWrapper<PetCategory> queryWrapper = new QueryWrapper<>();
-        queryWrapper.select("id", "name", "useful");
         queryWrapper.eq("useful", 1);
 //        System.out.println(this.list(queryWrapper));
         return this.list(queryWrapper);
