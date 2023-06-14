@@ -20,4 +20,9 @@ public interface PetCategoryService extends IService<PetCategory> {
 
     PetCategory getByName(String name);
 
+    boolean modifyPetCategory(PetCategory petCategory);
+
+    boolean addPetCategory(PetCategory petCategory);
+
+    boolean updateUsefulById(Integer id);
 }

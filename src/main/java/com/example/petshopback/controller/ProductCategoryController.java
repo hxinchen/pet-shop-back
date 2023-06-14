@@ -26,33 +26,36 @@ public class ProductCategoryController {
     @PostMapping("/add")
     public Result add(@RequestBody ProductCategory productCategory) {
         Result result = new Result();
-        try {
-            ProductCategory isExit = productCategoryService.getByName(productCategory.getName());
-            if (isExit != null) {
-                result.fail("周边分类：" + productCategory.getName() + "已存在");
-            } else {
-                result.setData(productCategoryService.save(productCategory));
-                result.success("新增分类成功");
-            }
-        } catch (Exception e) {
-            result.fail("新增分类失败：" + e.getMessage());
+        if (productCategoryService.addProductCategory(productCategory)) {
+            result.setData(productCategory);
+            result.success("新增分类成功");
+        } else {
+            result.fail("新增分类失败");
         }
         return result;
     }
 
-    @PostMapping("/update")
-    public Result update(@RequestBody ProductCategory productCategory) {
+    // 启用禁用useful
+    @PostMapping("/updateUseful")
+    public Result updateUseful(@RequestBody ProductCategory productCategory) {
         Result result = new Result();
-        try {
-            ProductCategory isExit = productCategoryService.getById(productCategory.getId());
-            if (isExit == null) {
-                result.fail("周边分类：" + productCategory.getName() + "不存在");
-            } else {
-                result.setData(productCategoryService.updateById(productCategory));
-                result.success("更新分类成功");
-            }
-        } catch (Exception e) {
-            result.fail("更新分类失败：" + e.getMessage());
+        if (productCategoryService.updateUsefulById(productCategory.getId())) {
+            result.success("更新分类成功");
+        } else {
+            result.fail("更新分类失败");
+        }
+        return result;
+    }
+
+    // 修改类别
+    @PostMapping("/modify")
+    public Result modify(@RequestBody ProductCategory productCategory) {
+        Result result = new Result();
+        if (productCategoryService.modifyProductCategory(productCategory)) {
+
+            result.success("修改分类成功");
+        } else {
+            result.fail("修改分类失败");
         }
         return result;
     }

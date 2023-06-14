@@ -43,10 +43,10 @@ public class UserAddress extends BaseEntity implements Serializable {
     private String phoneNumber;
 
     /**
-     * 地区码
+     * 地区
      */
-    @ApiModelProperty(value = "地区码")
-    private String areaCode;
+    @ApiModelProperty(value = "地区")
+    private String area;
 
     /**
      * 详细地址

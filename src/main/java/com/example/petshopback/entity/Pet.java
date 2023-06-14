@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Date;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
@@ -47,7 +48,7 @@ public class Pet extends BaseEntity implements Serializable {
      * 宠物描述
      */
     @ApiModelProperty(value = "宠物描述")
-    private String describe;
+    private String description;
 
     /**
      * 品种
@@ -59,7 +60,7 @@ public class Pet extends BaseEntity implements Serializable {
      * 出生年月日
      */
     @ApiModelProperty(value = "出生日期")
-    private LocalDate birthday;
+    private Date birthday;
 
     /**
      * 健康情况
@@ -95,5 +96,5 @@ public class Pet extends BaseEntity implements Serializable {
      * 视频id
      */
     @ApiModelProperty(value = "视频id")
-    private Integer videoId;
+    private String videoId;
 }
