@@ -35,4 +35,10 @@ public class ProductCategory extends BaseEntity implements Serializable {
      */
     @ApiModelProperty(value = "是否可用，0--不可用，1--可用")
     private Boolean useful;
+
+    /**
+     * 图片url
+     */
+    @ApiModelProperty(value = "图片url")
+    private String img;
 }

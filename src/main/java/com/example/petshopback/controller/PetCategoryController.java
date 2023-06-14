@@ -23,45 +23,45 @@ public class PetCategoryController {
     @Autowired
     private PetCategoryService petCategoryService;
 
+    // 新增
     @PostMapping("/add")
     public Result add(@RequestBody PetCategory petCategory) {
         Result result = new Result();
-        try {
-            PetCategory isExit = petCategoryService.getByName(petCategory.getName());
-            if (isExit != null) {
-                result.fail("宠物分类：" + petCategory.getName() + "已存在");
-            } else {
-                 result.setData(petCategoryService.save(petCategory));
-                 result.success("新增分类成功");
-            }
-        } catch (Exception e) {
-            result.fail("新增分类失败：" + e.getMessage());
+        if (petCategoryService.addPetCategory(petCategory)) {
+            result.setData(petCategory);
+            result.success("新增分类成功");
+        } else {
+            result.fail("新增分类失败");
         }
         return result;
     }
 
-    @PostMapping("/update")
-    public Result update(@RequestBody PetCategory petCategory) {
+    // 修改类别
+    @PostMapping("/modify")
+    public Result modify(@RequestBody PetCategory petCategory) {
         Result result = new Result();
-        try {
-            PetCategory oldCategory = petCategoryService.getById(petCategory.getId());
-            if (oldCategory == null) {
-                result.fail("宠物分类：" + petCategory.getName() + "不存在");
-            } else {
-                oldCategory.setUseful(false);
-                petCategoryService.updateById(oldCategory);
-                PetCategory newCategory = new PetCategory();
-                newCategory.setName(petCategory.getName());
-                newCategory.setUseful(true);
-                petCategoryService.save(newCategory);
-                result.success("更新分类成功");
-            }
-        } catch (Exception e) {
-            result.fail("更新分类失败：" + e.getMessage());
+        if (petCategoryService.modifyPetCategory(petCategory)) {
+            result.success("修改分类成功");
+        } else {
+            result.fail("修改分类失败");
+        }
+
+        return result;
+    }
+
+    // 启用禁用useful
+    @PostMapping("/updateUseful")
+    public Result updateUseful(@RequestBody PetCategory petCategory) {
+        Result result = new Result();
+        if (petCategoryService.updateUsefulById(petCategory.getId())) {
+            result.success("更新分类成功");
+        } else {
+            result.fail("更新分类失败");
         }
         return result;
     }
 
+    // 查询全部类别
     @GetMapping( "/getAllCate")
     public Result getAllCate() {
         Result result = new Result();
@@ -77,4 +77,5 @@ public class PetCategoryController {
         }
         return result;
     }
+
 }

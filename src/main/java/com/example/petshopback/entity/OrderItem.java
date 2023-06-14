@@ -47,4 +47,17 @@ public class OrderItem extends BaseEntity implements Serializable {
      */
     @ApiModelProperty(value = "商品id")
     private Integer productId;
+
+    /**
+     * 订单id
+     */
+    @ApiModelProperty(value = "订单id")
+    private Integer orderId;
+
+
+    /**
+     * 状态
+     */
+    @ApiModelProperty(value = "状态")
+    private Integer status;
 }
