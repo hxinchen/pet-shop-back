@@ -5,6 +5,7 @@ import com.example.petshopback.entity.Product;
 import com.example.petshopback.service.FavorService;
 import com.example.petshopback.service.ProductCategoryService;
 import com.example.petshopback.service.ProductService;
+import com.example.petshopback.service.ShopService;
 import com.example.petshopback.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,10 @@ public class ProductController {
     private ProductService productService;
     @Autowired
     private ProductCategoryService productCategoryService;
+
+    @Autowired
+    private ShopService shopService;
+
     @Autowired
     private FavorService favorService;
 
@@ -46,7 +51,13 @@ public class ProductController {
     public Result getById(Integer id) {
         Result result = new Result();
         Product product = productService.getById(id);
+        if (product == null) {
+            result.fail("查询产品失败");
+            return result;
+        }
         product.put("cateName", productCategoryService.getById(product.getCategoryId()).getName());
+        product.put("shopName", shopService.getById(product.getId()).getName());
+//        product.put("isFavor", favorService.getFavorByProductId(product.getId()));
         result.setData(product);
         result.success("查询产品成功");
         return result;
@@ -89,6 +100,7 @@ public class ProductController {
     private Result getProduct(Result result, Page<Product> productPage) {
         for (int i = 0; i < productPage.getRecords().size(); i++) {
             productPage.getRecords().get(i).put("cateName", productCategoryService.getById(productPage.getRecords().get(i).getCategoryId()).getName());
+            productPage.getRecords().get(i).put("shopName", shopService.getById(productPage.getRecords().get(i).getId()).getName());
             // productPage.getRecords().get(i).put("isFavor", favorService.getFavorById(productPage.getRecords().get(i).getId()) == null ? 0 : 1);
         }
         result.setData(productPage);

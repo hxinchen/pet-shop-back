@@ -8,6 +8,7 @@ import com.example.petshopback.entity.Shop;
 import com.example.petshopback.service.FavorService;
 import com.example.petshopback.service.PetCategoryService;
 import com.example.petshopback.service.PetService;
+import com.example.petshopback.service.ShopService;
 import com.example.petshopback.utils.Result;
 import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,10 @@ public class PetController {
     private PetService petService;
     @Autowired
     private PetCategoryService petCategoryService;
+
+    @Autowired
+    private ShopService shopService;
+
     @Autowired
     private FavorService favorService;
 
@@ -42,6 +47,17 @@ public class PetController {
         } else {
             result.fail("新增宠物失败");
         }
+        return result;
+    }
+
+    // 根据id查询
+    @GetMapping("/getById")
+    public Result getById(Integer id) {
+        Result result = new Result();
+        Pet pet = petService.getById(id);
+        pet.put("cateName", petCategoryService.getById(pet.getCategoryId()).getName());
+        result.setData(pet);
+        result.success("查询宠物成功");
         return result;
     }
 
@@ -84,7 +100,8 @@ public class PetController {
     private Result getPet(Result result, Page<Pet> pet) {
         for (int i=0; i < pet.getRecords().size(); i++) {
             pet.getRecords().get(i).put("cateName",petCategoryService.getById(pet.getRecords().get(i).getCategoryId()).getName());
-//            pet.getRecords().get(i).put("isFavor", favorService.getFavorById(pet.getRecords().get(i).getId()) == null ? 0 : 1);
+            pet.getRecords().get(i).put("shopName",shopService.getById(pet.getRecords().get(i).getShopId()).getName());
+//            pet.getRecords().get(i).put("isFavor", favorService.getFavorByPetId(pet.getRecords().get(i).getId()) == null ? 0 : 1);
         }
         result.setData(pet);
         result.success("查询成功");
