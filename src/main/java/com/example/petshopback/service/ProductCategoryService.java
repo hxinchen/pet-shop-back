@@ -19,4 +19,9 @@ public interface ProductCategoryService extends IService<ProductCategory> {
 
     ProductCategory getByName(String name);
 
+    boolean addProductCategory(ProductCategory productCategory);
+
+    boolean modifyProductCategory(ProductCategory productCategory);
+
+    boolean updateUsefulById(Integer id);
 }

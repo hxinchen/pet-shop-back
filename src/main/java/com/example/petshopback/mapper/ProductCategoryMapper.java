@@ -2,6 +2,7 @@ package com.example.petshopback.mapper;
 
 import com.example.petshopback.entity.ProductCategory;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * <p>
@@ -11,6 +12,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author hahaha
  * @since 2023-06-09 10:14:35
  */
+
 public interface ProductCategoryMapper extends BaseMapper<ProductCategory> {
 
 }

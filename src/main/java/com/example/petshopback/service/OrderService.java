@@ -1,7 +1,11 @@
 package com.example.petshopback.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.petshopback.entity.Order;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.text.ParseException;
+import java.util.concurrent.DelayQueue;
 
 /**
  * <p>
@@ -13,4 +17,12 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface OrderService extends IService<Order> {
 
+    void cancelOrder();
+
+    DelayQueue<Order> pushOrder(Order order);
+    Order add(Double sumPrice, Integer isPay) throws ParseException;
+
+    Order cancel(Integer orderId, String reason);
+
+    Page<Order> getAll(Integer pageNum, Integer pageSize);
 }
