@@ -53,4 +53,9 @@ public class CartController {
         result.setData(cartService.getA(userId));
         return result;
     }
+
+    @PostMapping("/mod")
+    public boolean mod(@RequestBody Cart card){
+        return cartService.updateById(card);
+    }
 }
