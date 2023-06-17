@@ -3,6 +3,8 @@ package com.example.petshopback.service;
 import com.example.petshopback.entity.Shop;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  * 	商店表 服务类
@@ -13,4 +15,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ShopService extends IService<Shop> {
 
+    boolean addShop(Shop shop);
+
+    List<Shop> getAllShop();
 }
