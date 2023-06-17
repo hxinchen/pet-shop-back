@@ -4,11 +4,8 @@ import com.example.petshopback.entity.UserAddress;
 import com.example.petshopback.service.UserAddressService;
 import com.example.petshopback.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
@@ -23,16 +20,64 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserAddressController {
     @Autowired
     private UserAddressService userAddressService;
-    @PostMapping("/add")
-    public Result add(@RequestBody UserAddress userAddress) {
 
+    @GetMapping("/getAddressByUserId")
+    public Result getAddressByUserId(Integer userId ) {
         Result result = new Result();
-        try {
-            this.userAddressService.save(userAddress);
-            result.success("新增地址成功");
-        } catch (Exception e) {
-            result.fail("新增地址失败：" + e.getMessage());
+        result.setData(userAddressService.getAddressByUserId(userId));
+        result.success("获取地址成功");
+        return result;
+    }
+
+    @GetMapping("/getAddressById")
+    public Result getAddressById(Integer addressId) {
+        Result result = new Result();
+        result.setData(userAddressService.getById(addressId));
+        result.success("获取地址成功");
+        return result;
+    }
+
+    @PostMapping("/updateDefaultById")
+    public Result updateDefaultById(Integer addressId,Boolean isDefault) {
+        Result result = new Result();
+        if(isDefault==null){
+            result.fail("修改默认地址失败");
+            return result;
         }
+        if(!userAddressService.updateDefault(addressId,isDefault)){
+            result.fail("修改默认地址失败,地址不存在");
+            return result;
+        }
+        result.success("修改默认地址成功");
+        return result;
+    }
+    //修改，添加地址
+    @PostMapping("/updateById")
+    public Result updateById(@RequestBody UserAddress userAddress) {
+        Result result = new Result();
+        if(!userAddressService.updateById(userAddress)){
+            userAddress.setUserId(1);
+            //如果需要设置为默认地址
+            if(userAddress.getIsDefault()){
+                   //置默认为非默认
+                   userAddressService.setNotDefault(1);
+            }
+            userAddressService.save(userAddress);
+            result.success("添加地址成功");
+        }else {
+            result.success("修改地址成功");
+        }
+        return result;
+    }
+
+    @PostMapping("/deleteById")
+    public Result deleteById(Integer addressId) {
+        Result result = new Result();
+        if(!userAddressService.removeById(addressId)){
+            result.fail("删除地址失败");
+            return result;
+        }
+        result.success("删除地址成功");
         return result;
     }
 }
