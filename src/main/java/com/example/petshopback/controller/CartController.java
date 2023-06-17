@@ -1,6 +1,7 @@
 package com.example.petshopback.controller;
 
 import com.example.petshopback.entity.Cart;
+import com.example.petshopback.mapper.CartMapper;
 import com.example.petshopback.service.CartService;
 import com.example.petshopback.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,41 +22,68 @@ import java.util.List;
 public class CartController {
     @Autowired
     private CartService cartService;
+
+
+    @Autowired
+    private CartMapper cartMapper;
+
     @GetMapping("/list")
-    public List<Cart> list(){
+    public List<Cart> list() {
         return cartService.list();
     }
 
-    @PostMapping("/save")
-    public Result save(@RequestBody Cart card){
+    @PostMapping("/add")
+    public Result add(Integer productId) {
         Result result = new Result();
-        try {
-            Cart isExit = cartService.getById(card.getId());
-            if (isExit != null) {
-                result.fail("已加入购物车");
-            } else {
-                result.setData(cartService.save(card));
-                result.success("加入购物车成功");
-            }
-        } catch (Exception e) {
-            result.fail("加入购物车失败：" + e.getMessage());
-        }
-        return result;
-    }
-    @PostMapping("/del")
-    public boolean del(@RequestParam String id){
-        return cartService.removeById(id);
-    }
 
-    @GetMapping("/get")
-    public Result getA(Integer userId){
-        Result result=new Result();
-        result.setData(cartService.getA(userId));
+        Cart cart = cartService.add(productId);
+        result.setData(cart);
+        result.success("加入购物车成功");
         return result;
     }
 
-    @PostMapping("/mod")
-    public boolean mod(@RequestBody Cart card){
-        return cartService.updateById(card);
+    @PostMapping("/sub")
+    public Result sub(Integer productId) {
+        Result result = new Result();
+
+        Cart cart = cartService.sub(productId);
+        result.setData(cart);
+        result.success("减少购物车成功");
+        return result;
+    }
+
+    @PostMapping("/deleteById")
+    public Result delete(Integer productId) {
+        Result result = new Result();
+        result.setData(cartService.delete(productId));
+        result.success("删除购物车成功");
+        return result;
+    }
+
+    @GetMapping("/getAll")
+    public Result getAll() {
+        Result result = new Result();
+
+        result.setData(cartService.getAll());
+        result.success("查询成功");
+        return result;
+    }
+
+    @PostMapping("/update")
+    public Result update(Integer productId) {
+        Result result = new Result();
+        result.setData(cartService.check(productId));
+        result.success("更新购物车成功");
+        return result;
+
+    }
+
+    @PostMapping("/updateAll")
+    public Result updateAll(String ids) {
+        Result result = new Result();
+        result.setData(cartService.updateAll(ids));
+        result.success("更新购物车成功");
+        return result;
+
     }
 }
