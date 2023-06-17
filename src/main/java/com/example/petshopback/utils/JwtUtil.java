@@ -19,7 +19,7 @@ import java.util.Map;
 public class JwtUtil {
 
     private static long EXPIRATION_TIME = 3600000 * 24; // 24 hour
-//private static long EXPIRATION_TIME = 10000 * 10;
+    //private static long EXPIRATION_TIME = 10000 * 10;
     private static String SECRET = "MDk4ZjZiY2Q0NjIxZDM3M2NhZGU0ZTgzMjY34DFDSSSd";// 秘钥
 
     private static final String USER_ID = "id";
@@ -50,7 +50,7 @@ public class JwtUtil {
 
         //AssertUtils.assertNotNull(token, ResultType.AGAIN_LOGIN, "Missing token");
 
-        if(StringUtils.isBlank(token)){
+        if (StringUtils.isBlank(token)) {
             System.out.println("Missing token");
         }
 
@@ -58,14 +58,14 @@ public class JwtUtil {
             Map<String, Object> body = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
             String id = (String) (body.get(USER_ID));
 
-            if(StringUtils.isBlank(id)){
+            if (StringUtils.isBlank(id)) {
                 System.out.println("Wrong token");
                 return "";
             }
 
 
             return id;
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Wrong token without id");
             return "";
         }
