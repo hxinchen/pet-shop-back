@@ -2,7 +2,9 @@ package com.example.petshopback.service;
 
 import com.example.petshopback.entity.Cart;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.example.petshopback.utils.Result;
+import com.example.petshopback.entity.ShopCart;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,5 +15,17 @@ import com.example.petshopback.utils.Result;
  * @since 2023-06-09 10:14:35
  */
 public interface CartService extends IService<Cart> {
-    Result getA(Integer userId);
+    List<ShopCart> getAll();
+
+    Cart add(Integer productId);
+
+    boolean check(Integer productId);
+
+    Cart sub(Integer productId);
+
+    boolean delete(Integer productId);
+
+    Boolean updateAll(String ids);
+
+    List<Cart> getCartByUserId();
 }

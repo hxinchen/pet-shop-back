@@ -8,11 +8,14 @@ import lombok.ToString;
 @ToString
 public class CartVO extends Cart{
 
-    @ApiModelProperty(value = "用户名")
-    private String username;
+//    @ApiModelProperty(value = "用户名")
+//    private String username;
 
     @ApiModelProperty(value = "商品名")
     private String productName;
+
+    @ApiModelProperty(value = "商店名")
+    private String shopName;
 
     @ApiModelProperty(value = "商品价格")
     private Double productPrice;

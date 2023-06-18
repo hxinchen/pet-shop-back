@@ -30,14 +30,14 @@ public class InterceptorConfig implements WebMvcConfigurer {
 
     public List<String> excludePattern(){
         List<String> ret = new ArrayList<String>();
-//        ret.add("/user/login");
-//        ret.add("/user/register");
+        ret.add("/user/login");
+        ret.add("/user/register");
 //        ret.add("/pet/*");
 //        ret.add("/product/*");
 //        ret.add("/review/*");
 //        ret.add("/petCategory/*");
 //        ret.add("/productCategory/*");
-        ret.add("/**");
+//        ret.add("/**");
 //        ret.add("/favor/*");
         return ret;
     }

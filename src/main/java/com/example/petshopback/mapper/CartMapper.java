@@ -21,18 +21,22 @@ import java.util.List;
 @Mapper
 @Repository
 public interface CartMapper extends BaseMapper<Cart> {
+
     @Select({
-"SELECT\n" +
-        "\tc.* ,\n" +
-        "\tpro.*,\n" +
-        "\tpro.`name` AS productName,\n" +
-        "\tpro.price AS productPrice,\n" +
-        "\tpro.img AS productImg\n" +
-        "FROM\n" +
-        "\tcart c\n" +
-        "\tLEFT JOIN product pro ON c.product_id = pro.id \n" +
-        "WHERE\n" +
-        "\tc.user_id = #{userId}"
+        "SELECT",
+        "c.*,",
+        "s.name AS shopName,",
+        "p.name AS productName,",
+        "p.img AS productImg,",
+        "p.price AS productPrice,",
+        "p.stock AS productStock",
+        "FROM",
+        "cart c",
+        "JOIN product p ON c.product_id = p.id",
+        "JOIN shop s ON p.shop_id = s.id",
+        "WHERE",
+        "c.user_id = #{userId}"
     })
-    List<CartVO> getA(Integer userId);
+    List<CartVO> getCartByUserId(Integer userId);
+
 }
