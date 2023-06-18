@@ -2,10 +2,13 @@ package com.example.petshopback.controller;
 
 import com.example.petshopback.entity.UserAddress;
 import com.example.petshopback.service.UserAddressService;
+import com.example.petshopback.utils.JwtUtil;
 import com.example.petshopback.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * <p>
@@ -20,10 +23,13 @@ import org.springframework.stereotype.Controller;
 public class UserAddressController {
     @Autowired
     private UserAddressService userAddressService;
-
+    @Autowired
+    private HttpServletRequest request;
     @GetMapping("/getAddressByUserId")
-    public Result getAddressByUserId(Integer userId ) {
+    public Result getAddressByUserId() {
         Result result = new Result();
+        String token= request.getHeader("Authorization");
+        int userId=Integer.parseInt(JwtUtil.validateToken(token));
         result.setData(userAddressService.getAddressByUserId(userId));
         result.success("获取地址成功");
         return result;

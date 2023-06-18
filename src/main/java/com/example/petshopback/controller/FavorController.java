@@ -4,17 +4,9 @@ import com.example.petshopback.entity.Favor;
 import com.example.petshopback.service.FavorService;
 import com.example.petshopback.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
-<<<<<<< HEAD
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RestController;
-=======
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
->>>>>>> main
 
 /**
  * <p>
@@ -37,7 +29,6 @@ public class FavorController {
     @PostMapping("/save")
     public Result save(@RequestBody Favor favor){
         Result result = new Result();
-        try {
             Favor isExit = favorService.getById(favor.getId());
             if (isExit != null) {
                 result.fail("已收藏");
@@ -45,9 +36,6 @@ public class FavorController {
                 result.setData(favorService.save(favor));
                 result.success("收藏成功");
             }
-        } catch (Exception e) {
-            result.fail("收藏失败：" + e.getMessage());
-        }
         return result;
     }
 
