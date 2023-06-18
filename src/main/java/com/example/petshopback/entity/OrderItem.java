@@ -31,12 +31,6 @@ public class OrderItem extends BaseEntity implements Serializable {
     private Boolean isPet;
 
     /**
-     * 商品名称
-     */
-    @ApiModelProperty(value = "商品名称")
-    private String name;
-
-    /**
      * 商品数量
      */
     @ApiModelProperty(value = "商品数量")

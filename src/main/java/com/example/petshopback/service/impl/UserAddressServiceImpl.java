@@ -5,8 +5,11 @@ import com.example.petshopback.entity.UserAddress;
 import com.example.petshopback.mapper.UserAddressMapper;
 import com.example.petshopback.service.UserAddressService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.petshopback.utils.JwtUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -19,11 +22,15 @@ import java.util.List;
  */
 @Service
 public class UserAddressServiceImpl extends ServiceImpl<UserAddressMapper, UserAddress> implements UserAddressService {
-
+    @Autowired
+    private HttpServletRequest request;
         @Override
-        public List<UserAddress> getAddressByUserId(Integer userId) {
+        public List<UserAddress> getAddress() {
+            String token = request.getHeader("token");
+//        System.out.println("token" + token);
+            String userId = JwtUtil.validateToken(token);
             QueryWrapper<UserAddress> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("user_id", 1);
+            queryWrapper.eq("user_id", Integer.valueOf(userId));
             return this.list(queryWrapper);
         }
 
@@ -40,9 +47,12 @@ public class UserAddressServiceImpl extends ServiceImpl<UserAddressMapper, UserA
     }
 
     @Override
-    public Boolean setNotDefault(Integer UserId) {
+    public Boolean setNotDefault() {
             QueryWrapper<UserAddress> userAddressQueryWrapper= new QueryWrapper<>();
-            userAddressQueryWrapper.eq("user_id",UserId);
+        String token = request.getHeader("token");
+//        System.out.println("token" + token);
+        String userId = JwtUtil.validateToken(token);
+            userAddressQueryWrapper.eq("user_id",Integer.valueOf(userId));
             userAddressQueryWrapper.eq("is_default",true);
             UserAddress userAddress=getOne(userAddressQueryWrapper);
             //如果有默认地址
@@ -59,6 +69,17 @@ public class UserAddressServiceImpl extends ServiceImpl<UserAddressMapper, UserA
     public UserAddress getById(Integer addressId) {
         QueryWrapper<UserAddress> userAddressQueryWrapper= new QueryWrapper<>();
         userAddressQueryWrapper.eq("id",addressId);
+        return this.getOne(userAddressQueryWrapper);
+    }
+
+    @Override
+    public UserAddress getDefault() {
+        QueryWrapper<UserAddress> userAddressQueryWrapper= new QueryWrapper<>();
+        String token = request.getHeader("token");
+//        System.out.println("token" + token);
+        String userId = JwtUtil.validateToken(token);
+        userAddressQueryWrapper.eq("user_id",Integer.valueOf(userId)).eq("is_default",true);
+
         return this.getOne(userAddressQueryWrapper);
     }
 

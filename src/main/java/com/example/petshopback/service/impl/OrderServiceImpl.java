@@ -68,7 +68,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     }
 
     @Override
-    public Order add(Double sumPrice, Integer pay) throws ParseException {
+    public Order add(Double sumPrice, Integer isPay) throws ParseException {
         Order order = new Order();
         String token = request.getHeader("Authorization");
 //        System.out.println("token" + token);
@@ -79,10 +79,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         order.setUserId(Integer.valueOf(userId));
         order.setNo(String.valueOf(UUID.randomUUID()));
         //订单状态
-        if (pay == 1){//支付
+        if (isPay == 1){//支付
             order.setStatus(2);
         }
-        else if (pay == 0) {//未支付
+        else if (isPay == 0) {//未支付
             order.setStatus(1);
             Date date = DateUtil.parse(order.getCreateTime());
 //            new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date)
@@ -92,6 +92,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
             this.cancelOrder();
         }
         this.save(order);
+
+
+
         return order;
     }
 

@@ -59,7 +59,7 @@ public class SearchServiceImpl extends ServiceImpl<SearchMapper, Search> impleme
             switch (option) {
                 case 1:
                     // 如果查询宠物数据，调用 PetMapper 的 selectPage 方法进行分页查询
-                    return getPageData(new Page<>(currentPage, everyPageSize), new QueryWrapper<Pet>().like("name", key).orderByDesc("id"), petMapper, result);
+                    return getPageData(new Page<>(currentPage, everyPageSize), new QueryWrapper<Pet>().like("breed", key).orderByDesc("id"), petMapper, result);
                 case 2:
                     // 如果查询商品数据，调用 ProductMapper 的 selectPage 方法进行分页查询
                     return getPageData(new Page<>(currentPage, everyPageSize), new QueryWrapper<Product>().like("name", key).orderByDesc("id"), productMapper, result);

@@ -38,12 +38,10 @@ public class OrderController {
     // 新增
     @PostMapping("/add")
     public Result add(Double sumPrice, Integer isPay) throws ParseException {
-
+        // isPay: 0 未支付 1 已支付
         System.out.println(sumPrice);
-
         Result result = new Result();
         result.setData(orderService.add(sumPrice, isPay));
-
         result.success("订单生成成功");
 
         return result;
