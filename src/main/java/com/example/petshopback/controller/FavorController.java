@@ -29,7 +29,6 @@ public class FavorController {
     @PostMapping("/save")
     public Result save(@RequestBody Favor favor){
         Result result = new Result();
-        try {
             Favor isExit = favorService.getById(favor.getId());
             if (isExit != null) {
                 result.fail("已收藏");
@@ -37,9 +36,6 @@ public class FavorController {
                 result.setData(favorService.save(favor));
                 result.success("收藏成功");
             }
-        } catch (Exception e) {
-            result.fail("收藏失败：" + e.getMessage());
-        }
         return result;
     }
 

@@ -59,4 +59,9 @@ public class UserAddress extends BaseEntity implements Serializable {
      */
     @ApiModelProperty(value = "标签")
     private String tag;
+    /**
+     * 收货人姓名
+     */
+    @ApiModelProperty(value = "收货人姓名")
+    private String name;
 }
