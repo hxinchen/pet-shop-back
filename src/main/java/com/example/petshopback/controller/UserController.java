@@ -24,32 +24,28 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
+    @Autowired
+    private HttpServletRequest request;
     /**
      * 用户注册
      */
     @PostMapping("/register")
     public Result register(@RequestBody User user) {
-        Result result=new Result();
-        // 检查用户名是否已存在
-        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(User::getUsername, user.getUsername());
-        User existUser = userService.getOne(queryWrapper);
+
+        Result result = new Result();
+//        // 检查用户名是否已存在
+//        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+//        queryWrapper.eq(User::getUsername, user.getUsername());
+//        User existUser = userService.getOne(queryWrapper);
+        User existUser = userService.getByName(user.getUsername());
         if (existUser != null) {
             result.fail("用户名已存在");
             return result;
         }
-        // 设置默认头像
-        user.setAvatar("default.png");
-        // 设置创建时间
-        user.setCreateTime(String.valueOf(LocalDateTime.now()));
-        // 设置默认为普通用户
-        user.setIsAdmin(false);
-        user.setIsBusiness(false);
-        // 对密码进行加密
-        user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
-        userService.save(user);
-        result.success("注册成功");
+        else {
+            result.setData(userService.register(user));
+            result.success("注册成功");
+        }
         return result;
     }
 
@@ -57,7 +53,7 @@ public class UserController {
      * 用户登录
      */
     @PostMapping("/login")
-    public Result login(@RequestBody User user) {
+    public Result login( @RequestBody User user) {
         Result result=new Result();
         String password = user.getPassword();
         // 对密码进行加密
@@ -83,7 +79,18 @@ public class UserController {
         result.setData(map);
         return result;
     }
+    /**
+     * 用户退出
+     */
+    @PostMapping("/logout")
+    public Result logout(HttpServletRequest request) {
+        Result result=new Result();
 
+        // 删除Session中存储的Token
+        request.getSession().removeAttribute("token");
+        result.success("退出成功");
+        return result;
+    }
 
     /**
      * 修改用户信息
@@ -112,29 +119,41 @@ public class UserController {
         return result;
     }
 
-    /**
-     * 根据用户 ID 查询用户信息
-     */
-    @GetMapping("/{id}")
-    public Result getById(@PathVariable Long id, HttpServletRequest request) {
-        Result result=new Result();
 
-        // 从Session中获取Token
-        String token = (String) request.getSession().getAttribute("token");
-        // 验证Token的有效性
+    @GetMapping("/validate")
+    public Result validate() {
+        Result result = new Result();
+        String token = request.getHeader("token");
+//        System.out.println("token" + token);
         String userId = JwtUtil.validateToken(token);
         if (StringUtils.isBlank(userId)) {
             result.fail("Token无效，请重新登录");
             return result;
         }
+        result.success("Token有效");
+        return result;
+    }
 
-        User user = userService.getById(id);
+    /**
+     * 根据用户 ID 查询用户信息
+     */
+    @GetMapping("/getById")
+    public Result getById() {
+        Result result=new Result();
+        String token = request.getHeader("token");
+//        System.out.println("token" + token);
+        String userId = JwtUtil.validateToken(token);
+        if (StringUtils.isBlank(userId)) {
+            result.fail("Token无效，请重新登录");
+            return result;
+        }
+        User user = userService.getById(Integer.valueOf(userId));
         if (user != null) {
             // 验证用户权限
-            if (!user.getId().equals(Long.valueOf(userId)) && !userService.getById(Long.valueOf(userId)).getIsAdmin()) {
-                result.fail("您没有权限查询其他用户的信息");
-                return result;
-            }
+//            if (!user.getId().equals(Long.valueOf(userId)) && !userService.getById(Long.valueOf(userId)).getIsAdmin()) {
+//                result.fail("您没有权限查询其他用户的信息");
+//                return result;
+//            }
             result.setData(user);
             return result;
         }
@@ -145,12 +164,11 @@ public class UserController {
     /**
      * 删除用户信息
      */
-    @DeleteMapping("/{id}")
-    public Result deleteById(@PathVariable Long id, HttpServletRequest request) {
+    @DeleteMapping("/deleteById")
+    public Result deleteById() {
         Result result=new Result();
-        // 从Session中获取Token
-        String token = (String) request.getSession().getAttribute("token");
-        // 验证Token的有效性
+        String token = request.getHeader("token");
+//        System.out.println("token" + token);
         String userId = JwtUtil.validateToken(token);
         if (StringUtils.isBlank(userId)) {
             result.fail("Token无效，请重新登录");
@@ -164,7 +182,7 @@ public class UserController {
             return result;
         }
 
-        userService.removeById(id);
+        userService.removeById(Integer.valueOf(userId));
         result.success("用户信息删除成功");
         return result;
     }

@@ -32,6 +32,8 @@ public class InterceptorConfig implements WebMvcConfigurer {
         List<String> ret = new ArrayList<String>();
         ret.add("/user/login");
         ret.add("/user/register");
+        ret.add("/user/validate");
+        ret.add("/search/*");
 //        ret.add("/pet/*");
 //        ret.add("/product/*");
 //        ret.add("/review/*");
