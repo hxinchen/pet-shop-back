@@ -78,6 +78,7 @@ public class UserController {
         String token = JwtUtil.generateToken(loginUser.getId().toString());
         Map<String, Object> map = new HashMap<>();
         // 将Token存储到Map中
+        user.setPassword(null);
         map.put("token", token);
         map.put("user", loginUser);
         result.setData(map);
@@ -127,7 +128,7 @@ public class UserController {
      * 根据用户 ID 查询用户信息
      */
     @GetMapping("/{id}")
-    public Result<User> getById(@PathVariable Long id, HttpServletRequest request) {
+    public Result getById(@PathVariable Long id, HttpServletRequest request) {
         Result result=new Result();
 
         // 从Session中获取Token
