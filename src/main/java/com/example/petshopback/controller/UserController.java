@@ -24,7 +24,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
+    @Autowired
+    private HttpServletRequest request;
     /**
      * 用户注册
      */
@@ -57,7 +58,7 @@ public class UserController {
      * 用户登录
      */
     @PostMapping("/login")
-    public Result login(@RequestBody User user) {
+    public Result login( @RequestBody User user) {
         Result result=new Result();
         String password = user.getPassword();
         // 对密码进行加密
@@ -83,7 +84,18 @@ public class UserController {
         result.setData(map);
         return result;
     }
+    /**
+     * 用户退出
+     */
+    @PostMapping("/logout")
+    public Result logout(HttpServletRequest request) {
+        Result result=new Result();
 
+        // 删除Session中存储的Token
+        request.getSession().removeAttribute("token");
+        result.success("退出成功");
+        return result;
+    }
 
     /**
      * 修改用户信息

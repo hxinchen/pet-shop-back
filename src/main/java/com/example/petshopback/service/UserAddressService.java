@@ -3,6 +3,8 @@ package com.example.petshopback.service;
 import com.example.petshopback.entity.UserAddress;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  * 用户地址表 服务类
@@ -12,5 +14,12 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2023-06-09 10:14:35
  */
 public interface UserAddressService extends IService<UserAddress> {
+
+    List<UserAddress> getAddressByUserId(Integer userId);
+
+    Boolean updateDefault(Integer addressId, Boolean isDefault);
+//    置默认为非默认
+    Boolean setNotDefault(Integer UserId);
+    UserAddress getById(Integer addressId);
 
 }

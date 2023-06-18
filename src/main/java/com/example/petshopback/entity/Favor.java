@@ -31,16 +31,16 @@ public class Favor extends BaseEntity implements Serializable {
     private Integer userId;
 
     /**
-     * 宠物id
+     * 宠物或产品id
      */
-    @ApiModelProperty(value = "宠物id")
-    private Integer petId;
+    @ApiModelProperty(value = "宠物或产品id")
+    private Integer favorId;
 
     /**
-     * 产品id
+     * 是否宠物
      */
-    @ApiModelProperty(value = "产品id")
-    private Integer productId;
+    @ApiModelProperty(value = "是否宠物")
+    private Boolean isPet;
 
     /**
      * 创建时间
