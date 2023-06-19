@@ -56,6 +56,7 @@ public class PetController {
         Result result = new Result();
         Pet pet = petService.getById(id);
         pet.put("cateName", petCategoryService.getById(pet.getCategoryId()).getName());
+        pet.put("shopName", shopService.getById(pet.getShopId()).getName());
         result.setData(pet);
         result.success("查询宠物成功");
         return result;

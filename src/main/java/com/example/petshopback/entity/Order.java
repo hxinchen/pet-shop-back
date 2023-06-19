@@ -71,12 +71,6 @@ public class Order extends BaseEntity implements Delayed {
     private String cancelReason;
 
     /**
-     * 商家id
-     */
-    @ApiModelProperty(value = "商家id")
-    private Integer businessId;
-
-    /**
      * 地址id
      */
     @ApiModelProperty(value = "地址id")

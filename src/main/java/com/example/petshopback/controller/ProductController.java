@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 
+import java.util.List;
+
 /**
  * <p>
  * 产品表（商品，周边） 前端控制器
@@ -63,6 +65,20 @@ public class ProductController {
         return result;
     }
 
+    // 根据ids查询产品
+    @GetMapping("/getShopIds")
+    public Result getShopIds(String ids) {
+        Result result = new Result();
+        List<Integer> list = productService.getShopIds(ids);
+        if (list == null) {
+            result.fail("查询产品失败");
+            return result;
+        }
+        result.setData(list);
+        result.success("查询产品成功");
+        return result;
+    }
+
     // 按类别查询产品
     @GetMapping("/getByCategory")
     public Result getByCategory(Integer pageNum, Integer pageSize, Integer category) {
@@ -100,7 +116,7 @@ public class ProductController {
     private Result getProduct(Result result, Page<Product> productPage) {
         for (int i = 0; i < productPage.getRecords().size(); i++) {
             productPage.getRecords().get(i).put("cateName", productCategoryService.getById(productPage.getRecords().get(i).getCategoryId()).getName());
-            productPage.getRecords().get(i).put("shopName", shopService.getById(productPage.getRecords().get(i).getId()).getName());
+            productPage.getRecords().get(i).put("shopName", shopService.getById(productPage.getRecords().get(i).getShopId()).getName());
             // productPage.getRecords().get(i).put("isFavor", favorService.getFavorById(productPage.getRecords().get(i).getId()) == null ? 0 : 1);
         }
         result.setData(productPage);

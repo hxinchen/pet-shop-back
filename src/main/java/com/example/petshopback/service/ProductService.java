@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.petshopback.entity.Product;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  * 产品表（商品，周边） 服务类
@@ -19,4 +21,6 @@ public interface ProductService extends IService<Product> {
     Page<Product> getByCategory(Integer pageNum, Integer pageSize, Integer category);
 
     boolean deleteByIds(String ids);
+
+    List<Integer> getShopIds(String ids);
 }

@@ -32,10 +32,10 @@ public class OrderItemController {
     private OrderItemService orderItemService;
 
     @PostMapping("/add")
-    public Result add(Integer orderId, Integer status, String ids, String nums, Integer isPet){
+    public Result add(Integer orderId, Integer status, String ids, String nums, Integer isPet, String shopIds){
         Result result = new Result();
 
-        List<OrderItem> list = orderItemService.add(orderId, status, ids, nums, isPet);
+        List<OrderItem> list = orderItemService.add(orderId, status, ids, nums, isPet, shopIds);
         System.out.println(list);
         result.setData(list);
         result.success("添加成功");
@@ -61,8 +61,6 @@ public class OrderItemController {
         }
         return result;
     }
-
-
 
     @GetMapping( "/getByOrderId")
     public Result getByOrderId(Integer orderId) {

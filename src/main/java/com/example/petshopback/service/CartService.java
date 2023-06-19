@@ -23,7 +23,7 @@ public interface CartService extends IService<Cart> {
 
     Cart sub(Integer productId);
 
-    boolean delete(Integer productId);
+    boolean deleteByIds(String ids);
 
     Boolean updateAll(String ids);
 

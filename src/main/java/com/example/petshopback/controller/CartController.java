@@ -52,10 +52,10 @@ public class CartController {
         return result;
     }
 
-    @PostMapping("/deleteById")
-    public Result delete(Integer productId) {
+    @PostMapping("/deleteByIds")
+    public Result deleteByIds(String ids) {
         Result result = new Result();
-        result.setData(cartService.delete(productId));
+        result.setData(cartService.deleteByIds(ids));
         result.success("删除购物车成功");
         return result;
     }

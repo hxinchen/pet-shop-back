@@ -25,6 +25,7 @@ public interface CartMapper extends BaseMapper<Cart> {
     @Select({
         "SELECT",
         "c.*,",
+        "p.shop_id AS shopId,",
         "s.name AS shopName,",
         "p.name AS productName,",
         "p.img AS productImg,",

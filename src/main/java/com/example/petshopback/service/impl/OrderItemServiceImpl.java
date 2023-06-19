@@ -34,7 +34,7 @@ public class OrderItemServiceImpl extends ServiceImpl<OrderItemMapper, OrderItem
     }
 
     @Override
-    public List<OrderItem> add(Integer orderId, Integer status, String ids, String nums, Integer isPet) {
+    public List<OrderItem> add(Integer orderId, Integer status, String ids, String nums, Integer isPet, String shopIds) {
 
 //        String token = request.getHeader("Authorization");
 //        String userId = JwtUtil.validateToken(token);
@@ -42,11 +42,13 @@ public class OrderItemServiceImpl extends ServiceImpl<OrderItemMapper, OrderItem
 
         String[] arrayId = ids.split(",");
         String[] arrayNum = nums.split(",");
+        String[] arrayShopId = shopIds.split(",");
 
         for (int i = 0; i < arrayId.length; i++) {
             OrderItem orderItem = new OrderItem();
             orderItem.setOrderId(orderId);
             orderItem.setStatus(status);
+            orderItem.setShopId(Integer.valueOf(arrayShopId[i]));
             orderItem.setProductId(Integer.valueOf(arrayId[i]));
             orderItem.setCount(Integer.valueOf(arrayNum[i]));
             // 判断是否是宠物

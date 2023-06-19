@@ -121,19 +121,21 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements Ca
     }
 
     @Override
-    public boolean delete(Integer productId) {
+    public boolean deleteByIds(String ids) {
         String token = request.getHeader("token");
 //        System.out.println("token" + token);
         String userId = JwtUtil.validateToken(token);
         QueryWrapper<Cart> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("user_id", Integer.valueOf(userId)).eq("product_id", productId);
-        Cart cart = this.getOne(queryWrapper);
-        if (cart != null) {
-            this.removeById(cart.getId());
-            return true;
+        List<String> list = new ArrayList<>();
+        String[] array = ids.split(",");
+        for (String i:array) {
+            list.add(i);
         }
-        return false;
+        queryWrapper.eq("user_id", Integer.valueOf(userId)).in("product_id", list);
+        this.remove(queryWrapper);
+        return true;
     }
+
     @Override
     public List<Cart> getCartByUserId() {
         QueryWrapper<Cart> queryWrapper = new QueryWrapper<>();

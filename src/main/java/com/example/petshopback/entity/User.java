@@ -71,4 +71,11 @@ public class User extends BaseEntity implements Serializable {
      */
     @ApiModelProperty(value = "是否商家：0表示不是，1表示是")
     private Boolean isBusiness;
+
+
+    /**
+     * 商店id
+     */
+    @ApiModelProperty(value = "商店id")
+    private Integer shopId;
 }
