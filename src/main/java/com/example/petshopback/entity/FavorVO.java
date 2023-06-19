@@ -7,12 +7,10 @@ import lombok.ToString;
 @ToString
 public class FavorVO extends Favor{
     private String username;
-    private String petName;
-    private Double petPrice;
-    private String petImg;
-    private String productName;
-    private Double productPrice;
-    private String productImg;
-
+    private String favorName;
+    private Double favorPrice;
+    private String favorImg;
+    private String favorShopName;
+    private String favorBreed;
 
 }

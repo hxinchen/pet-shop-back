@@ -23,7 +23,7 @@ public class UserAddressServiceImpl extends ServiceImpl<UserAddressMapper, UserA
         @Override
         public List<UserAddress> getAddressByUserId(Integer userId) {
             QueryWrapper<UserAddress> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("user_id", 1);
+            queryWrapper.eq("user_id", userId);
             return this.list(queryWrapper);
         }
 

@@ -2,6 +2,7 @@ package com.example.petshopback.service;
 
 import com.example.petshopback.entity.Favor;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.petshopback.entity.FavorVO;
 import com.example.petshopback.utils.Result;
 
 import java.util.List;
@@ -15,5 +16,7 @@ import java.util.List;
  * @since 2023-06-09 10:14:35
  */
 public interface FavorService extends IService<Favor> {
-    Result getA(Integer userId);
+    List<FavorVO> getAll(int userId);
+    void add(Favor favor);
+
 }

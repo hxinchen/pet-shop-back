@@ -1,8 +1,6 @@
 package com.example.petshopback.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.example.petshopback.common.R;
 import com.example.petshopback.entity.Cart;
 import com.example.petshopback.entity.CartVO;
 import com.example.petshopback.entity.ShopCart;

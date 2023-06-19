@@ -25,11 +25,12 @@ public class UserAddressController {
     private UserAddressService userAddressService;
     @Autowired
     private HttpServletRequest request;
-    @GetMapping("/getAddressByUserId")
-    public Result getAddressByUserId() {
+    @GetMapping("/getAddress")
+    public Result getAddress() {
         Result result = new Result();
-        String token= request.getHeader("Authorization");
+        String token= request.getHeader("token");
         int userId=Integer.parseInt(JwtUtil.validateToken(token));
+        System.out.println(userId);
         result.setData(userAddressService.getAddressByUserId(userId));
         result.success("获取地址成功");
         return result;
@@ -61,12 +62,14 @@ public class UserAddressController {
     @PostMapping("/updateById")
     public Result updateById(@RequestBody UserAddress userAddress) {
         Result result = new Result();
+        String token= request.getHeader("token");
+        int userId=Integer.parseInt(JwtUtil.validateToken(token));
+        userAddress.setUserId(userId);
         if(!userAddressService.updateById(userAddress)){
-            userAddress.setUserId(1);
             //如果需要设置为默认地址
             if(userAddress.getIsDefault()){
                    //置默认为非默认
-                   userAddressService.setNotDefault(1);
+                   userAddressService.setNotDefault(userId);
             }
             userAddressService.save(userAddress);
             result.success("添加地址成功");

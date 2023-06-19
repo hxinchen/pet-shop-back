@@ -21,25 +21,22 @@ import java.util.List;
 @Mapper
 @Repository
 public interface FavorMapper extends BaseMapper<Favor> {
-    @Select({
-           "SELECT\n" +
-                   "\tf.* ,\n" +
-                   "\tp.*,\n" +
-                   "\tp.`name` AS petName,\n" +
-                   "\tp.price AS petPrice,\n" +
-                   "\tp.img AS petImg,\n" +
-                   "\tpro.*,\n" +
-                   "\tpro.`name` AS productName,\n" +
-                   "\tpro.price AS productPrice,\n" +
-                   "\tpro.img AS productImg,\n" +
-                   "\tu.username AS username\n" +
-                   "FROM\n" +
-                   "\tfavor f\n" +
-                   "\tLEFT JOIN pet p ON f.pet_id = p.id\n" +
-                   "\tLEFT JOIN product pro ON f.product_id = pro.id \n" +
-                   "\tLEFT JOIN user u ON f.user_id = u.id\n" +
-                   "WHERE\n" +
-                   "\tf.user_id = #{userId}"
-    })
-    List<FavorVO> getA(Integer userId);
+    @Select("SELECT " +
+            "   f.is_pet, " +
+            "   f.id, " +
+            "   IF(f.is_pet = 1, p.id, pro.id) AS favor_id, " +
+            "   IF(f.is_pet = 1, p.name, pro.name) AS favor_name, " +
+            "   IF(f.is_pet = 1, p.price, pro.price) AS favor_price, " +
+            "   IF(f.is_pet = 1, p.img, pro.img) AS favor_img, " +
+            "   IF(f.is_pet = 1, p.breed,'') AS favor_breed, " +
+            "   IF(f.is_pet = 1, (SELECT shop.name FROM shop WHERE shop.id = p.shop_id), (SELECT shop.name FROM shop WHERE shop.id = pro.shop_id)) AS favor_shop_name, " +
+            "   u.username " +
+            "FROM " +
+            "   favor f " +
+            "   LEFT JOIN pet p ON f.favor_id = p.id AND f.is_pet = 1 " +
+            "   LEFT JOIN product pro ON f.favor_id = pro.id AND f.is_pet = 0 " +
+            "   LEFT JOIN user u ON f.user_id = u.id " +
+            "WHERE " +
+            "   f.user_id = #{userId}")
+    List<FavorVO> getAll(int userId);
 }
