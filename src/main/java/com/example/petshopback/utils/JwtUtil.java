@@ -51,7 +51,7 @@ public class JwtUtil {
         //AssertUtils.assertNotNull(token, ResultType.AGAIN_LOGIN, "Missing token");
 
         if (StringUtils.isBlank(token)) {
-            System.out.println("Missing token");
+            System.out.println("缺少token");
         }
 
         try {
@@ -59,14 +59,14 @@ public class JwtUtil {
             String id = (String) (body.get(USER_ID));
 
             if (StringUtils.isBlank(id)) {
-                System.out.println("Wrong token");
+                System.out.println("错误的token");
                 return "";
             }
 
 
             return id;
         } catch (Exception e) {
-            System.out.println("Wrong token without id");
+            System.out.println("错误的token 无id");
             return "";
         }
 

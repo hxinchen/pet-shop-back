@@ -68,21 +68,40 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     }
 
     @Override
-    public Order add(Double sumPrice, Integer pay) throws ParseException {
+    public List<Order> getByStatus(Integer status) {
+        String token = request.getHeader("token");
+//        System.out.println("token" + token);
+        String userId = JwtUtil.validateToken(token);
+        System.out.println(userId);
+        QueryWrapper<Order> queryWrapper = new QueryWrapper<>();
+
+        if(status == 0){//0-全部订单
+            queryWrapper.eq("user_id", Integer.valueOf(userId));
+        }
+        else {//其他状态：1-待支付，2-待发货，3-待收货，4-待评价，5-已取消
+            queryWrapper.eq("user_id", Integer.valueOf(userId)).eq("status", status);
+        }
+        return this.list(queryWrapper);
+    }
+
+    @Override
+    public Order add(Double sumPrice, Integer isPay, Integer addressId) throws ParseException {
         Order order = new Order();
-        String token = request.getHeader("Authorization");
+        String token = request.getHeader("token");
 //        System.out.println("token" + token);
         String userId = JwtUtil.validateToken(token);
 
+        order.setAddressId(addressId);
         order.setSumPrice(sumPrice);
         order.setCreateTime(DateTool.getCurrTime());
         order.setUserId(Integer.valueOf(userId));
         order.setNo(String.valueOf(UUID.randomUUID()));
+
         //订单状态
-        if (pay == 1){//支付
+        if (isPay == 1){//支付
             order.setStatus(2);
         }
-        else if (pay == 0) {//未支付
+        else if (isPay == 0) {//未支付
             order.setStatus(1);
             Date date = DateUtil.parse(order.getCreateTime());
 //            new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date)
@@ -92,6 +111,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
             this.cancelOrder();
         }
         this.save(order);
+
+
+
         return order;
     }
 
@@ -107,7 +129,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
                         this.cancel(order.getId(), "超时自动取消");
                         List<OrderItem> list = orderItemService.getByOrderId(order.getId());
                         for (OrderItem OrderItem: list) {//更新该订单下的所有订单详情状态
-                            OrderItem.setStatus(-2);
+                            OrderItem.setStatus(5);
                             orderItemService.updateById(OrderItem);
                         }
 //                        queue.remove(order);
@@ -133,7 +155,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         queryWrapper.eq("id", orderId);
         Order order = this.getOne(queryWrapper);
         if (order != null) {
-            order.setStatus(-5);//取消订单
+            order.setStatus(5);//取消订单
             order.setCancelTime(new Date());
             order.setCancelReason(reason);
             this.updateById(order);

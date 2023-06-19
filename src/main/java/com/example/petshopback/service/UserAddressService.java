@@ -15,11 +15,12 @@ import java.util.List;
  */
 public interface UserAddressService extends IService<UserAddress> {
 
-    List<UserAddress> getAddressByUserId(Integer userId);
+    List<UserAddress> getAddress();
 
     Boolean updateDefault(Integer addressId, Boolean isDefault);
 //    置默认为非默认
-    Boolean setNotDefault(Integer UserId);
+    Boolean setNotDefault();
     UserAddress getById(Integer addressId);
 
+    UserAddress getDefault();
 }

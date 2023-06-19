@@ -54,4 +54,21 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         }
         return this.removeByIds(list);
     }
+
+    @Override
+    public List<Integer> getShopIds(String ids) {
+        List<Integer> list = new ArrayList<>();
+        String[] array = ids.split(",");
+
+        for (String id : array) {
+            Integer productId = Integer.valueOf(id);
+            Product product = this.getById(productId);
+            if (product != null) {
+                list.add(product.getShopId());
+            }
+        }
+
+        return list;
+    }
+
 }
