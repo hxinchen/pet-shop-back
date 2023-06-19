@@ -14,6 +14,9 @@ public class CartVO extends Cart{
     @ApiModelProperty(value = "商品名")
     private String productName;
 
+    @ApiModelProperty(value = "商店id")
+    private Integer shopId;
+
     @ApiModelProperty(value = "商店名")
     private String shopName;
 

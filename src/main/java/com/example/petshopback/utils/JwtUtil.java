@@ -66,7 +66,7 @@ public class JwtUtil {
 
             return id;
         } catch (Exception e) {
-            System.out.println("Wrong token without id");
+            System.out.println("错误的token 无id");
             return "";
         }
 

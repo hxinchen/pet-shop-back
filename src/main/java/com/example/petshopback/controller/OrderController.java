@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.text.ParseException;
+import java.util.List;
 
 /**
  * <p>
@@ -37,13 +38,11 @@ public class OrderController {
 
     // 新增
     @PostMapping("/add")
-    public Result add(Double sumPrice, Integer isPay) throws ParseException {
-
+    public Result add(Double sumPrice, Integer isPay, Integer addressId) throws ParseException {
+        // isPay: 0 未支付 1 已支付
         System.out.println(sumPrice);
-
         Result result = new Result();
-        result.setData(orderService.add(sumPrice, isPay));
-
+        result.setData(orderService.add(sumPrice, isPay, addressId));
         result.success("订单生成成功");
 
         return result;
@@ -61,6 +60,23 @@ public class OrderController {
         }
         result.setData(orderPage);
         result.success("查询成功");
+        return result;
+    }
+
+    //根据status查订单
+    @GetMapping( "/getByStatus")
+    public Result getByStatus(Integer status) {
+        Result result = new Result();
+        //通过id查找
+        List<Order> list = orderService.getByStatus(status);
+//        System.out.println(list);
+        if (!list.isEmpty()) {
+            result.setData(list);
+            result.success("查询成功");
+        }
+        else {
+            result.fail("查询失败");
+        }
         return result;
     }
 }

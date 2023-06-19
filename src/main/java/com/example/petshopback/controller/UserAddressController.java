@@ -31,8 +31,23 @@ public class UserAddressController {
         String token= request.getHeader("token");
         int userId=Integer.parseInt(JwtUtil.validateToken(token));
         System.out.println(userId);
-        result.setData(userAddressService.getAddressByUserId(userId));
+        result.setData(userAddressService.getAddress());
         result.success("获取地址成功");
+        return result;
+    }
+
+    // 查默认地址
+    @GetMapping("/getDefault")
+    public Result getDefault() {
+        Result result = new Result();
+        UserAddress userAddress = userAddressService.getDefault();
+        if (userAddress == null) {
+            result.setData("无默认地址，请点击选择");
+            result.fail("获取默认地址失败");
+            return result;
+        }
+        result.setData(userAddress);
+        result.success("获取默认地址成功");
         return result;
     }
 
@@ -69,7 +84,7 @@ public class UserAddressController {
             //如果需要设置为默认地址
             if(userAddress.getIsDefault()){
                    //置默认为非默认
-                   userAddressService.setNotDefault(userId);
+                   userAddressService.setNotDefault();
             }
             userAddressService.save(userAddress);
             result.success("添加地址成功");

@@ -5,8 +5,11 @@ import com.example.petshopback.entity.UserAddress;
 import com.example.petshopback.mapper.UserAddressMapper;
 import com.example.petshopback.service.UserAddressService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.petshopback.utils.JwtUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -19,19 +22,24 @@ import java.util.List;
  */
 @Service
 public class UserAddressServiceImpl extends ServiceImpl<UserAddressMapper, UserAddress> implements UserAddressService {
+    @Autowired
+    private HttpServletRequest request;
 
-        @Override
-        public List<UserAddress> getAddressByUserId(Integer userId) {
-            QueryWrapper<UserAddress> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("user_id", userId);
-            return this.list(queryWrapper);
-        }
+    @Override
+    public List<UserAddress> getAddress() {
+        String token = request.getHeader("token");
+//        System.out.println("token" + token);
+        String userId = JwtUtil.validateToken(token);
+        QueryWrapper<UserAddress> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", Integer.valueOf(userId));
+        return this.list(queryWrapper);
+    }
 
     @Override
     public Boolean updateDefault(Integer addressId, Boolean isDefault) {
-        QueryWrapper<UserAddress> userAddressQueryWrapper= new QueryWrapper<>();
-        UserAddress userAddress=getById(addressId);
-        if(userAddress==null){
+        QueryWrapper<UserAddress> userAddressQueryWrapper = new QueryWrapper<>();
+        UserAddress userAddress = getById(addressId);
+        if (userAddress == null) {
             return false;
         }
         userAddress.setIsDefault(isDefault);
@@ -40,25 +48,39 @@ public class UserAddressServiceImpl extends ServiceImpl<UserAddressMapper, UserA
     }
 
     @Override
-    public Boolean setNotDefault(Integer UserId) {
-            QueryWrapper<UserAddress> userAddressQueryWrapper= new QueryWrapper<>();
-            userAddressQueryWrapper.eq("user_id",UserId);
-            userAddressQueryWrapper.eq("is_default",true);
-            UserAddress userAddress=getOne(userAddressQueryWrapper);
-            //如果有默认地址
-            if(userAddress!=null   ) {
-                userAddress.setIsDefault(false);
-                this.updateById(userAddress);
-            }else {
-                return false;
-            }
-            return true;
+    public Boolean setNotDefault() {
+        QueryWrapper<UserAddress> userAddressQueryWrapper = new QueryWrapper<>();
+        String token = request.getHeader("token");
+//        System.out.println("token" + token);
+        String userId = JwtUtil.validateToken(token);
+        userAddressQueryWrapper.eq("user_id", Integer.valueOf(userId));
+        userAddressQueryWrapper.eq("is_default", true);
+        UserAddress userAddress = getOne(userAddressQueryWrapper);
+        //如果有默认地址
+        if (userAddress != null) {
+            userAddress.setIsDefault(false);
+            this.updateById(userAddress);
+        } else {
+            return false;
+        }
+        return true;
     }
 
     @Override
     public UserAddress getById(Integer addressId) {
-        QueryWrapper<UserAddress> userAddressQueryWrapper= new QueryWrapper<>();
-        userAddressQueryWrapper.eq("id",addressId);
+        QueryWrapper<UserAddress> userAddressQueryWrapper = new QueryWrapper<>();
+        userAddressQueryWrapper.eq("id", addressId);
+        return this.getOne(userAddressQueryWrapper);
+    }
+
+    @Override
+    public UserAddress getDefault() {
+        QueryWrapper<UserAddress> userAddressQueryWrapper = new QueryWrapper<>();
+        String token = request.getHeader("token");
+//        System.out.println("token" + token);
+        String userId = JwtUtil.validateToken(token);
+        userAddressQueryWrapper.eq("user_id", Integer.valueOf(userId)).eq("is_default", true);
+
         return this.getOne(userAddressQueryWrapper);
     }
 
