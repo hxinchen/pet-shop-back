@@ -1,8 +1,14 @@
 package com.example.petshopback.controller;
 
+import com.example.petshopback.service.VideoService;
+import com.example.petshopback.utils.Result;
+import com.example.petshopback.utils.fileUpload;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * <p>
@@ -15,5 +21,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/video")
 public class VideoController {
+    @Autowired
+    private VideoService videoService;
 
+    @PostMapping("/upLoad")
+    public Result upLoad(MultipartFile file){
+        Result result=new Result();
+        fileUpload fileUpload=new fileUpload();
+        String url= fileUpload.upload(file);
+        result.setData(url);
+        result.success("上传成功");
+        return result;
+    }
 }

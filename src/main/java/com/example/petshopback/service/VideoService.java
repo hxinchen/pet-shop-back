@@ -2,6 +2,7 @@ package com.example.petshopback.service;
 
 import com.example.petshopback.entity.Video;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * <p>
