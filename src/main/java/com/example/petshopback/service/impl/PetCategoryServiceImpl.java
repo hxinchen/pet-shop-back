@@ -77,22 +77,26 @@ public class PetCategoryServiceImpl extends ServiceImpl<PetCategoryMapper, PetCa
 
     @Override
     public boolean modifyPetCategory(PetCategory petCategory) {
-        try {
             PetCategory oldCategory = getById(petCategory.getId());
-            if (oldCategory == null) {
-                throw new Exception("宠物分类：" + petCategory.getName() + "不存在");
-            } else {
-                // 旧useful置为false
-                oldCategory.setUseful(false);
-                updateById(oldCategory);
-                PetCategory newCategory = new PetCategory();
-                newCategory.setName(petCategory.getName());
-                save(newCategory);
+            if (oldCategory != null) {
+                if (!petCategory.getName().equals(oldCategory.getName())) {
+                    // 旧useful置为false
+                    oldCategory.setUseful(false);
+                    updateById(oldCategory);
+                    PetCategory newCategory = new PetCategory();
+                    newCategory.setName(petCategory.getName());
+                    newCategory.setImg(petCategory.getImg());
+                    newCategory.setUseful(petCategory.getUseful());
+                    save(newCategory);
+                }
+                else {
+                    oldCategory.setImg(petCategory.getImg());
+                    oldCategory.setUseful(petCategory.getUseful());
+                    updateById(oldCategory);
+                }
                 return true;
             }
-        } catch (Exception e) {
-            return false;
-        }
+        return false;
     }
 
 }
