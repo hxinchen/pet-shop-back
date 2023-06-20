@@ -40,7 +40,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
         ret.add("/pet/getByCategory");
         ret.add("/product/*");
         ret.add("/review/get");
-        ret.add("/petCategory/*");
+        ret.add("/petCategory/**");
         ret.add("/productCategory/*");
         ret.add("/swagger-resources/**");
         ret.add("/**");

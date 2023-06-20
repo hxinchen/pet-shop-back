@@ -4,9 +4,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.petshopback.entity.PetCategory;
 import com.example.petshopback.service.PetCategoryService;
 import com.example.petshopback.utils.Result;
+import com.example.petshopback.utils.fileUpload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -47,6 +49,16 @@ public class PetCategoryController {
             result.fail("修改分类失败");
         }
 
+        return result;
+    }
+
+    @PostMapping("/upLoad")
+    public Result upLoad(@RequestParam(value = "file") MultipartFile file){
+        Result result=new Result();
+        fileUpload fileUpload=new fileUpload();
+        String url= fileUpload.upload(file);
+        result.setData(url);
+        result.success("上传成功");
         return result;
     }
 

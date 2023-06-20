@@ -62,18 +62,24 @@ public class ProductCategoryServiceImpl extends ServiceImpl<ProductCategoryMappe
 
     @Override
     public boolean modifyProductCategory(ProductCategory productCategory) {
-            ProductCategory oldCategory = getById(productCategory.getId());
-            if (oldCategory == null) {
-                System.out.println("商品分类：" + productCategory.getName() + "不存在");
-            } else {
+        ProductCategory oldCategory = getById(productCategory.getId());
+        if (oldCategory != null) {
+            if (!productCategory.getName().equals(oldCategory.getName())) {
                 // 旧useful置为false
                 oldCategory.setUseful(false);
                 updateById(oldCategory);
                 ProductCategory newCategory = new ProductCategory();
                 newCategory.setName(productCategory.getName());
+                newCategory.setImg(productCategory.getImg());
+                newCategory.setUseful(productCategory.getUseful());
                 save(newCategory);
-                return true;
+            } else {
+                oldCategory.setImg(productCategory.getImg());
+                oldCategory.setUseful(productCategory.getUseful());
+                updateById(oldCategory);
             }
+            return true;
+        }
         return false;
     }
 
