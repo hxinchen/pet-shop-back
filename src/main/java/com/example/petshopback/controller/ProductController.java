@@ -58,7 +58,7 @@ public class ProductController {
             return result;
         }
         product.put("cateName", productCategoryService.getById(product.getCategoryId()).getName());
-        product.put("shopName", shopService.getById(product.getId()).getName());
+        product.put("shopName", shopService.getById(product.getShopId()).getName());
 //        product.put("isFavor", favorService.getFavorByProductId(product.getId()));
         result.setData(product);
         result.success("查询产品成功");

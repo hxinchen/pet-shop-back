@@ -1,6 +1,8 @@
 package com.example.petshopback.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.petshopback.entity.PetCategory;
 import com.example.petshopback.entity.ProductCategory;
 import com.example.petshopback.mapper.ProductCategoryMapper;
 import com.example.petshopback.service.ProductCategoryService;
@@ -23,11 +25,18 @@ public class ProductCategoryServiceImpl extends ServiceImpl<ProductCategoryMappe
     public List<ProductCategory> getAllCate() {
 
         QueryWrapper<ProductCategory> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("useful", 1);
+        queryWrapper.eq("useful", true);
 //        System.out.println(this.list(queryWrapper));
         return this.list(queryWrapper);
     }
+    @Override
+    public Page<ProductCategory> getPageCate(Integer pageNum, Integer pageSize) {
 
+        QueryWrapper<ProductCategory> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("useful", true);
+        Page<ProductCategory> page = new Page<>(pageNum, pageSize);
+        return this.page(page, queryWrapper);
+    }
     @Override
     public ProductCategory getByName(String name) {
         QueryWrapper<ProductCategory> queryWrapper = new QueryWrapper<>();
