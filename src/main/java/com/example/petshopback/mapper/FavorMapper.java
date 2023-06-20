@@ -37,6 +37,6 @@ public interface FavorMapper extends BaseMapper<Favor> {
             "   LEFT JOIN product pro ON f.favor_id = pro.id AND f.is_pet = 0 " +
             "   LEFT JOIN user u ON f.user_id = u.id " +
             "WHERE " +
-            "   f.user_id = #{userId}")
-    List<FavorVO> getAll(int userId);
+            "   f.user_id = #{userId} and f.is_pet=#{isPet}")
+    List<FavorVO> getAll(int userId, Boolean isPet);
 }

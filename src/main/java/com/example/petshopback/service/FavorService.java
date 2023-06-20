@@ -16,7 +16,7 @@ import java.util.List;
  * @since 2023-06-09 10:14:35
  */
 public interface FavorService extends IService<Favor> {
-    List<FavorVO> getAll(int userId);
+    List<FavorVO> getAll(int userId,Boolean isPet);
     void add(Favor favor);
-
+    int findByfavorId(int favorId,Boolean isPet);
 }

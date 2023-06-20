@@ -37,12 +37,13 @@ public class FavorController {
         Result result = new Result();
         String token= request.getHeader("token");
         int userId=Integer.parseInt(JwtUtil.validateToken(token));
-        Favor isExit = favorService.getById(favor.getId());
-        if (isExit != null) {
+        int isExit = favorService.findByfavorId(favor.getFavorId(),favor.getIsPet());
+        if (isExit!=0) {
             result.fail("已收藏");
         } else {
             favor.setUserId(userId);
             favorService.add(favor);
+            result.setData(favor.getId());
             result.success("收藏成功");
         }
         return result;
@@ -58,14 +59,27 @@ public class FavorController {
         }
         return result;
     }
+    //根据宠物或商品id查找收藏
+    @GetMapping("/findByPetId")
+    public Result findByPetId(Integer favorId,Boolean isPet){
+        Result result=new Result();
+        int id=favorService.findByfavorId(favorId,isPet);
+        if(id!=0){
+            result.setData(id);
+            result.success("已收藏");
+        }else {
+            result.fail("未收藏");
+        }
+        return result;
+    }
 
     @GetMapping("/getAll")
-    public  Result getAll(){
+    public  Result getAll(Boolean isPet){
         Result result = new Result();
         System.out.println("进入getAll");
         String token= request.getHeader("token");
         int userId=Integer.parseInt(JwtUtil.validateToken(token));
-        List<FavorVO> favorVOList=favorService.getAll(userId);
+        List<FavorVO> favorVOList=favorService.getAll(userId,isPet);
         result.setData(favorVOList);
         return result;
 }

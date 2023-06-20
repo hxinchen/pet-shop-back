@@ -24,7 +24,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("application/json; charset=utf-8");
-        System.out.println("认证成功");
+        System.out.println("认证成功：用户 "+id+" 访问资源");
         return true;
     }
 }
