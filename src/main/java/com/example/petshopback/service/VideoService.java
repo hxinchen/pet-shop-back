@@ -13,5 +13,5 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @since 2023-06-09 10:14:35
  */
 public interface VideoService extends IService<Video> {
-
+    public void addPetVideo(Integer petId,String url,String name);
 }

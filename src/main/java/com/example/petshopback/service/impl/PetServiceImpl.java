@@ -47,6 +47,24 @@ public class PetServiceImpl extends ServiceImpl<PetMapper, Pet> implements PetSe
         return this.page(page, queryWrapper);
     }
 
+    @Override
+    public Pet addVideo(Integer petId, Integer videoId) {
+        Pet pet = getById(petId);
+        if (pet == null) {
+            return null;
+        }
+        String videoIds= pet.getVideoId();
+        //将videoId加在videoIds后面
+        if (videoIds != null) {
+            videoIds = videoIds + "," + videoId;
+        } else {
+            videoIds = videoId.toString();
+        }
+        pet.setVideoId(videoIds);
+        updateById(pet);
+        return pet;
+    }
+
     //根据ids删除宠物
     public boolean deleteByIds(String ids) {
         List<String> list = new ArrayList<>();

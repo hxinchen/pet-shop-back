@@ -18,7 +18,7 @@ public interface PetService extends IService<Pet> {
     boolean addPet(Pet pet);
 
     Page<Pet> getByCategory(Integer pageNum, Integer pageSize, Integer category);
-
+    Pet addVideo(Integer petId,Integer videoId);
 
     boolean deleteByIds(String ids);
 }

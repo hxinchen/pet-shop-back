@@ -17,4 +17,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements VideoService {
 
+    @Override
+    public void addPetVideo(Integer petId, String url, String name) {
+        Video video=new Video();
+        video.setPetId(petId);
+        video.setVideoUrl(url);
+        video.setVideoName(name);
+        this.save(video);
+    }
 }
