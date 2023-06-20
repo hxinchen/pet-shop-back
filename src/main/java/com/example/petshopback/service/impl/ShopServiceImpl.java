@@ -1,13 +1,17 @@
 package com.example.petshopback.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.petshopback.entity.Pet;
 import com.example.petshopback.entity.Shop;
 import com.example.petshopback.mapper.ShopMapper;
 import com.example.petshopback.service.ShopService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.petshopback.utils.JwtUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -20,6 +24,9 @@ import java.util.List;
  */
 @Service
 public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements ShopService {
+
+    @Autowired
+    private HttpServletRequest request;
 
     @Override
     public boolean addShop(Shop shop) {
@@ -35,8 +42,18 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements Sh
     }
 
     @Override
-    public List<Shop> getAllShop() {
+    public Page<Shop> getAllShop(Integer pageNum, Integer pageSize) {
+        Page<Shop> page = new Page<>(pageNum, pageSize);
+        return this.page(page);
+    }
+
+    @Override
+    public Shop getShop() {
+        String token = request.getHeader("token");
+
+        String userId = JwtUtil.validateToken(token);
         QueryWrapper<Shop> queryWrapper = new QueryWrapper<>();
-        return this.list(queryWrapper);
+        queryWrapper.eq("user_id", Integer.valueOf(userId));
+        return getOne(queryWrapper);
     }
 }

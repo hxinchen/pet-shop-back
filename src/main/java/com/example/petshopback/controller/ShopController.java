@@ -1,15 +1,14 @@
 package com.example.petshopback.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.petshopback.entity.ProductCategory;
 import com.example.petshopback.entity.Shop;
 import com.example.petshopback.service.ShopService;
+import com.example.petshopback.service.UserService;
 import com.example.petshopback.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -24,7 +23,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/shop")
 public class ShopController {
-
+    @Autowired
+    private UserService userService;
     @Autowired
     private ShopService shopService;
 
@@ -42,14 +42,31 @@ public class ShopController {
     }
 
     // 查询全部商店
-    @PostMapping("/getAllShop")
-    public Result getAllShop() {
+    @GetMapping("/getAll")
+    public Result getAll(Integer pageNum, Integer pageSize) {
         Result result = new Result();
-        List<Shop> isExit = shopService.getAllShop();
-//        System.out.println(isExit);
-        if (isExit != null) {
+        Page<Shop> page = shopService.getAllShop(pageNum, pageSize);
+        if (page.getRecords() != null) {
             result.success("查询成功");
-            result.setData(isExit);
+            for (int i=0; i < page.getRecords().size(); i++) {
+                page.getRecords().get(i).put("userName",userService.getById(page.getRecords().get(i).getUserId()).getUsername());
+            }
+            result.setData(page);
+        }
+        else {
+            result.fail("查询失败");
+        }
+        return result;
+    }
+
+    // 根据id查询商店
+    @GetMapping("/getById")
+    public Result getById() {
+        Result result = new Result();
+        Shop shop = shopService.getShop();
+        if (shop != null) {
+            result.success("查询成功");
+            result.setData(shop);
         }
         else {
             result.fail("查询失败");

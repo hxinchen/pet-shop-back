@@ -1,5 +1,7 @@
 package com.example.petshopback.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.petshopback.entity.PetCategory;
 import com.example.petshopback.entity.ProductCategory;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -16,7 +18,7 @@ import java.util.List;
 public interface ProductCategoryService extends IService<ProductCategory> {
 
     List<ProductCategory> getAllCate();
-
+    Page<ProductCategory> getPageCate(Integer pageNum, Integer pageSize);
     ProductCategory getByName(String name);
 
     boolean addProductCategory(ProductCategory productCategory);
