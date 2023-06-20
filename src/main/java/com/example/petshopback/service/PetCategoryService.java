@@ -1,5 +1,6 @@
 package com.example.petshopback.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.petshopback.entity.PetCategory;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -17,6 +18,7 @@ public interface PetCategoryService extends IService<PetCategory> {
 
     List<PetCategory> getAllCate();
 
+    Page<PetCategory> getPageCate(Integer pageNum, Integer pageSize);
 
     PetCategory getByName(String name);
 

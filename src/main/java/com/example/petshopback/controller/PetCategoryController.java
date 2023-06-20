@@ -1,5 +1,6 @@
 package com.example.petshopback.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.petshopback.entity.PetCategory;
 import com.example.petshopback.service.PetCategoryService;
 import com.example.petshopback.utils.Result;
@@ -51,9 +52,9 @@ public class PetCategoryController {
 
     // 启用禁用useful
     @PostMapping("/updateUseful")
-    public Result updateUseful(@RequestBody PetCategory petCategory) {
+    public Result updateUseful(Integer id) {
         Result result = new Result();
-        if (petCategoryService.updateUsefulById(petCategory.getId())) {
+        if (petCategoryService.updateUsefulById(id)) {
             result.success("更新分类成功");
         } else {
             result.fail("更新分类失败");
@@ -67,6 +68,21 @@ public class PetCategoryController {
         Result result = new Result();
 
         List<PetCategory> isExit = petCategoryService.getAllCate();
+//        System.out.println(isExit);
+        if (isExit != null) {
+            result.success("查询成功");
+            result.setData(isExit);
+        }
+        else {
+            result.fail("查询失败");
+        }
+        return result;
+    }
+
+    @GetMapping( "/getPageCate")
+    public Result getPageCate(Integer pageNum, Integer pageSize) {
+        Result result = new Result();
+        Page<PetCategory> isExit = petCategoryService.getPageCate(pageNum,pageSize);
 //        System.out.println(isExit);
         if (isExit != null) {
             result.success("查询成功");

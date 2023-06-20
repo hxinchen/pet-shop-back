@@ -2,6 +2,7 @@ package com.example.petshopback.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.petshopback.entity.User;
 import com.example.petshopback.service.UserService;
 import com.example.petshopback.utils.JwtUtil;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -79,16 +81,16 @@ public class UserController {
         result.setData(map);
         return result;
     }
-    /**
-     * 用户退出
-     */
-    @PostMapping("/logout")
-    public Result logout(HttpServletRequest request) {
-        Result result=new Result();
 
-        // 删除Session中存储的Token
-        request.getSession().removeAttribute("token");
-        result.success("退出成功");
+
+    @PostMapping("/deleteByIds")
+    public Result deleteByIds(String ids) {
+        Result result = new Result();
+
+        userService.deleteByIds(ids);
+
+        result.success("删除成功");
+
         return result;
     }
 
@@ -96,26 +98,35 @@ public class UserController {
      * 修改用户信息
      */
     @PutMapping
-    public Result update(HttpServletRequest request, @RequestBody User user) {
+    public Result update(@RequestBody User user) {
         Result result=new Result();
-        // 从Session中获取Token
-        String token = (String) request.getSession().getAttribute("token");
-        // 验证Token的有效性
+//        // 从Session中获取Token
+//        String token = (String) request.getSession().getAttribute("token");
+//        // 验证Token的有效性
+//        String userId = JwtUtil.validateToken(token);
+//        if (StringUtils.isBlank(userId)) {
+//            result.fail("Token无效，请重新登录");
+//            return result;
+//        }
+        String token = request.getHeader("token");
+
         String userId = JwtUtil.validateToken(token);
-        if (StringUtils.isBlank(userId)) {
-            result.fail("Token无效，请重新登录");
-            return result;
-        }
 
         // 验证用户权限
-        User loginUser = userService.getById(Long.valueOf(userId));
-        if (!loginUser.getId().equals(user.getId()) && !loginUser.getIsAdmin()) {
+        User loginUser = userService.getById(Integer.valueOf(userId));
+        if (!loginUser.getIsAdmin()) {
             result.fail("您没有权限修改其他用户的信息");
             return result;
         }
-
-        userService.updateById(user);
-        result.success("用户信息修改成功");
+        User isUser = userService.updateUser(user);
+        if (isUser != null) {
+            isUser.setPassword("");
+            result.setData(isUser);
+            result.success("更新成功");
+        }
+        else {
+            result.fail("更新失败");
+        }
         return result;
     }
 
@@ -131,6 +142,19 @@ public class UserController {
             return result;
         }
         result.success("Token有效");
+        return result;
+    }
+
+    @GetMapping("/getAll")
+    public Result getAllUser(Integer pageNum, Integer pageSize) {
+        Result result = new Result();
+        Page<User> page = userService.getAllUser(pageNum, pageSize);
+        List<User> user = page.getRecords();
+        for (User user1:user) {
+            user1.setPassword("");
+        }
+        result.setData(page);
+        result.success("查询成功");
         return result;
     }
 

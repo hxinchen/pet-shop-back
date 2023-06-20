@@ -1,5 +1,6 @@
 package com.example.petshopback.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.petshopback.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -19,4 +20,10 @@ public interface UserService extends IService<User> {
      User getByName(String username);
 
      Map<String, Object> login(User user);
+
+    Page<User> getAllUser(Integer pageNum, Integer pageSize);
+
+    User updateUser(User user);
+
+    void deleteByIds(String ids);
 }

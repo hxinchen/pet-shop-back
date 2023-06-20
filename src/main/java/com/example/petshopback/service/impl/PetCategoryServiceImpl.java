@@ -1,7 +1,9 @@
 package com.example.petshopback.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.petshopback.entity.PetCategory;
+import com.example.petshopback.entity.ProductCategory;
 import com.example.petshopback.mapper.PetCategoryMapper;
 import com.example.petshopback.service.PetCategoryService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -20,14 +22,21 @@ import java.util.List;
 @Service
 public class PetCategoryServiceImpl extends ServiceImpl<PetCategoryMapper, PetCategory> implements PetCategoryService {
     @Override
+    public Page<PetCategory> getPageCate(Integer pageNum, Integer pageSize) {
+
+        QueryWrapper<PetCategory> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("useful", true);
+        Page<PetCategory> page = new Page<>(pageNum, pageSize);
+        return this.page(page, queryWrapper);
+    }
+    @Override
     public List<PetCategory> getAllCate() {
 
         QueryWrapper<PetCategory> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("useful", 1);
+        queryWrapper.eq("useful", true);
 //        System.out.println(this.list(queryWrapper));
         return this.list(queryWrapper);
     }
-
     public boolean addPetCategory(PetCategory petCategory) {
         try {
             PetCategory isExit = getByName(petCategory.getName());
