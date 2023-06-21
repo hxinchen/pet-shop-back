@@ -16,9 +16,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface PetService extends IService<Pet> {
 
     boolean addPet(Pet pet);
-
+    // 根据shopid分页查询宠物
+    Page<Pet> pageByShopId(Integer pageNum, Integer pageSize, Integer shopId);
     Page<Pet> getByCategory(Integer pageNum, Integer pageSize, Integer category);
-
+    Pet addVideo(Integer petId,Integer videoId);
 
     boolean deleteByIds(String ids);
 }

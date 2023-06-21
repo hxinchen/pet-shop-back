@@ -109,6 +109,27 @@ public class PetController {
         return result;
     }
 
+    //按id添加视频
+    @PostMapping("/addVideo")
+    public Result addVideo(Integer id,Integer videoId){
+        Result result = new Result();
+        Pet pet= petService.addVideo(id,videoId);
+        if (petService.updateById(pet)) {
+            result.success("添加视频成功");
+        } else {
+            result.fail("添加视频失败");
+        }
+        return result;
+    }
 
+    // 根据shopid分页查询宠物
+    @GetMapping("/pageByShopId")
+    public Result pageByShopId(Integer pageNum, Integer pageSize, Integer shopId) {
+        Result result = new Result();
+        Page<Pet> page = petService.pageByShopId(pageNum, pageSize, shopId);
+        result.setData(page);
+        result.success("查询宠物成功");
+        return result;
+    }
 
 }

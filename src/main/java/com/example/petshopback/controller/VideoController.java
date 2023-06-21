@@ -25,12 +25,15 @@ public class VideoController {
     private VideoService videoService;
 
     @PostMapping("/upLoad")
-    public Result upLoad(MultipartFile file){
+    public Result upLoad(MultipartFile file,Integer petId,String videoName){
         Result result=new Result();
         fileUpload fileUpload=new fileUpload();
         String url= fileUpload.upload(file);
+        videoService.addPetVideo(petId,url,videoName);
         result.setData(url);
         result.success("上传成功");
         return result;
     }
+
+
 }

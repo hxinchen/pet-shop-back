@@ -16,6 +16,9 @@ import java.util.List;
  */
 public interface ProductService extends IService<Product> {
 
+    //根据shopId查询分页类别
+    Page<Product> pageByShopId(Integer pageNum, Integer pageSize, Integer shopId);
+
     boolean addProduct(Product product);
 
     Page<Product> getByCategory(Integer pageNum, Integer pageSize, Integer category);

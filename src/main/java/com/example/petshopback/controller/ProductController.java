@@ -124,4 +124,15 @@ public class ProductController {
         return result;
     }
 
+    //根据shopId查询分页类别
+    @GetMapping("/pageByShopId")
+    public Result pageByShopId(Integer pageNum, Integer pageSize, Integer shopId) {
+        Result result = new Result();
+        Page<Product> productPage = productService.pageByShopId(pageNum, pageSize, shopId);
+        result.setData(productPage);
+        result.success("查询成功");
+        return result;
+    }
+
+
 }

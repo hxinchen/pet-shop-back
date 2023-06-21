@@ -23,6 +23,14 @@ import java.util.List;
 @Service
 public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> implements ProductService {
     @Override
+    public Page<Product> pageByShopId(Integer pageNum, Integer pageSize, Integer shopId) {
+        Page<Product> page = new Page<>(pageNum, pageSize);
+        QueryWrapper<Product> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("shop_id", shopId);
+        return this.page(page, queryWrapper);
+    }
+
+    @Override
     public boolean addProduct(Product product) {
         QueryWrapper<Product> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("name", product.getName());
