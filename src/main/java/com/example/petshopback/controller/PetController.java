@@ -97,7 +97,7 @@ public class PetController {
         return getPet(result, page);
     }
 
-    // 按商店查询
+
     private Result getPet(Result result, Page<Pet> pet) {
         for (int i=0; i < pet.getRecords().size(); i++) {
             pet.getRecords().get(i).put("cateName",petCategoryService.getById(pet.getRecords().get(i).getCategoryId()).getName());
@@ -119,6 +119,16 @@ public class PetController {
         } else {
             result.fail("添加视频失败");
         }
+        return result;
+    }
+
+    // 根据shopid分页查询宠物
+    @GetMapping("/pageByShopId")
+    public Result pageByShopId(Integer pageNum, Integer pageSize, Integer shopId) {
+        Result result = new Result();
+        Page<Pet> page = petService.pageByShopId(pageNum, pageSize, shopId);
+        result.setData(page);
+        result.success("查询宠物成功");
         return result;
     }
 

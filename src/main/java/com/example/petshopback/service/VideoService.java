@@ -14,4 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public interface VideoService extends IService<Video> {
     public void addPetVideo(Integer petId,String url,String name);
+    //根据id查询视频
+    public Video getVideoById(Integer id);
 }

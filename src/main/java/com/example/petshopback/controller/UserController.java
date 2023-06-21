@@ -210,4 +210,20 @@ public class UserController {
         result.success("用户信息删除成功");
         return result;
     }
+
+    //根据用户名查询用户信息
+    @GetMapping("/getByName")
+    public Result getByName(String username) {
+        Result result=new Result();
+        User user = userService.getByName(username);
+        if (user != null) {
+            user.setPassword("");
+            result.setData(user);
+            result.success("查询成功");
+        }
+        else {
+            result.fail("查询失败");
+        }
+        return result;
+    }
 }

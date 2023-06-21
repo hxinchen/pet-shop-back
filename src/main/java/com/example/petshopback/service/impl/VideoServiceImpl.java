@@ -25,4 +25,9 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         video.setVideoName(name);
         this.save(video);
     }
+
+    @Override
+    public Video getVideoById(Integer id) {
+        return this.getById(id);
+    }
 }

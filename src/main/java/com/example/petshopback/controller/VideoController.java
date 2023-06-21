@@ -34,4 +34,6 @@ public class VideoController {
         result.success("上传成功");
         return result;
     }
+
+
 }

@@ -60,8 +60,8 @@ public class ShopController {
     }
 
     // 根据id查询商店
-    @GetMapping("/getById")
-    public Result getById() {
+    @GetMapping("/getByUserId")
+    public Result getByUserId() {
         Result result = new Result();
         Shop shop = shopService.getShop();
         if (shop != null) {
