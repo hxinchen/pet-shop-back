@@ -26,4 +26,6 @@ public interface ProductCategoryService extends IService<ProductCategory> {
     boolean modifyProductCategory(ProductCategory productCategory);
 
     boolean updateUsefulById(Integer id);
+
+    Page<ProductCategory> getAllPageCate(Integer pageNum, Integer pageSize);
 }

@@ -69,6 +69,13 @@ public class PetCategoryServiceImpl extends ServiceImpl<PetCategoryMapper, PetCa
     }
 
     @Override
+    public Page<PetCategory> getAllPageCate(Integer pageNum, Integer pageSize) {
+        QueryWrapper<PetCategory> queryWrapper = new QueryWrapper<>();
+        Page<PetCategory> page = new Page<>(pageNum, pageSize);
+        return this.page(page, queryWrapper);
+    }
+
+    @Override
     public PetCategory getByName(String name) {
         QueryWrapper<PetCategory> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("name", name);

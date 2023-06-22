@@ -29,9 +29,9 @@ public class VideoController {
         Result result=new Result();
         fileUpload fileUpload=new fileUpload();
         String url= fileUpload.upload(file);
-        videoService.addPetVideo(petId,url,videoName);
+        videoService.modifyPetVideo(petId, url, videoName);
         result.setData(url);
-        result.success("上传成功");
+        result.success("上传成功，已经更新video数据库");
         return result;
     }
 
