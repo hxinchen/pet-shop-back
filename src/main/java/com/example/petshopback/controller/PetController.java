@@ -5,10 +5,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.petshopback.entity.Pet;
 import com.example.petshopback.entity.Product;
 import com.example.petshopback.entity.Shop;
-import com.example.petshopback.service.FavorService;
-import com.example.petshopback.service.PetCategoryService;
-import com.example.petshopback.service.PetService;
-import com.example.petshopback.service.ShopService;
+import com.example.petshopback.entity.Video;
+import com.example.petshopback.service.*;
 import com.example.petshopback.utils.Result;
 import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +28,8 @@ public class PetController {
     private PetService petService;
     @Autowired
     private PetCategoryService petCategoryService;
-
+    @Autowired
+    private VideoService videoService;
     @Autowired
     private ShopService shopService;
 
@@ -57,6 +56,8 @@ public class PetController {
         Pet pet = petService.getById(id);
         pet.put("cateName", petCategoryService.getById(pet.getCategoryId()).getName());
         pet.put("shopName", shopService.getById(pet.getShopId()).getName());
+        Video video = videoService.getById(pet.getVideoId());
+        pet.put("url", video.getVideoUrl());
         result.setData(pet);
         result.success("查询宠物成功");
         return result;
