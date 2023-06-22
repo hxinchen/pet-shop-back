@@ -1,5 +1,6 @@
 package com.example.petshopback.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.petshopback.entity.Video;
 import com.example.petshopback.mapper.VideoMapper;
 import com.example.petshopback.service.VideoService;
@@ -24,6 +25,17 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         video.setVideoUrl(url);
         video.setVideoName(name);
         this.save(video);
+    }
+
+    @Override
+    public void modifyPetVideo(Integer petId, String url, String name) {
+        // 根据petId修改video
+        QueryWrapper<Video> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("pet_id", petId);
+        Video video = this.getOne(queryWrapper);
+        video.setVideoUrl(url);
+        video.setVideoName(name);
+        this.updateById(video);
     }
 
     @Override

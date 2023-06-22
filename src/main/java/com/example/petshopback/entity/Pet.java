@@ -60,7 +60,7 @@ public class Pet extends BaseEntity implements Serializable {
      * 出生年月日
      */
     @ApiModelProperty(value = "出生日期")
-    private Date birthday;
+    private String birthday;
 
     /**
      * 健康情况
