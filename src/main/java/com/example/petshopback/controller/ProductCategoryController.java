@@ -93,4 +93,19 @@ public class ProductCategoryController {
         return result;
     }
 
+    @GetMapping( "/getAllPageCate")
+    public Result getAllPageCate(Integer pageNum, Integer pageSize) {
+        Result result = new Result();
+        Page<ProductCategory> isExit = productCategoryService.getAllPageCate(pageNum,pageSize);
+//        System.out.println(isExit);
+        if (isExit != null) {
+            result.success("查询成功");
+            result.setData(isExit);
+        }
+        else {
+            result.fail("查询失败");
+        }
+        return result;
+    }
+
 }

@@ -99,4 +99,11 @@ public class ProductCategoryServiceImpl extends ServiceImpl<ProductCategoryMappe
             return false;
         }
     }
+
+    @Override
+    public Page<ProductCategory> getAllPageCate(Integer pageNum, Integer pageSize) {
+        QueryWrapper<ProductCategory> queryWrapper = new QueryWrapper<>();
+        Page<ProductCategory> page = new Page<>(pageNum, pageSize);
+        return this.page(page, queryWrapper);
+    }
 }

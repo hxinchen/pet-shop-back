@@ -8,6 +8,7 @@ import com.example.petshopback.mapper.PetMapper;
 import com.example.petshopback.service.PetService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.petshopback.service.VideoService;
+import com.example.petshopback.utils.DateTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +37,21 @@ public class PetServiceImpl extends ServiceImpl<PetMapper, Pet> implements PetSe
             System.out.println("宠物已存在，新增宠物失败");
             return false;
         }
-        save(pet);
+        Pet pet1 = new Pet();
+        pet1.setShopId(pet.getShopId());
+        pet1.setName(pet.getName());
+        pet1.setAge(pet.getAge());
+        pet1.setShopId(pet.getShopId());
+        pet1.setDescription(pet.getDescription());
+        pet1.setBreed(pet.getBreed());
+        pet1.setHealth(pet.getHealth());
+        pet1.setCategoryId(pet.getCategoryId());
+        pet1.setPrice(pet.getPrice());
+        pet1.setImg(pet.getImg());
+
+        pet1.setCreateTime(DateTool.getCurrTime());
+        pet1.setBirthday(DateTool.getCurrDay());
+        save(pet1);
         return true;
     }
 

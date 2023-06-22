@@ -27,4 +27,6 @@ public interface PetCategoryService extends IService<PetCategory> {
     boolean addPetCategory(PetCategory petCategory);
 
     boolean updateUsefulById(Integer id);
+
+    Page<PetCategory> getAllPageCate(Integer pageNum, Integer pageSize);
 }

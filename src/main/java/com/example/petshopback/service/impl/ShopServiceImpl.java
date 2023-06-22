@@ -53,7 +53,8 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements Sh
 
         String userId = JwtUtil.validateToken(token);
         QueryWrapper<Shop> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("user_id", Integer.valueOf(userId));
+//        queryWrapper.eq("user_id", Integer.valueOf(userId));
+        queryWrapper.eq("user_id", 1227);
         return getOne(queryWrapper);
     }
 }
