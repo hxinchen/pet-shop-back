@@ -122,4 +122,16 @@ public class PetCategoryController {
         return result;
     }
 
+    // 根据ids删除
+    @PostMapping("/deleteByIds")
+    public Result deleteByIds(String ids) {
+        Result result = new Result();
+        if (petCategoryService.deleteByIds(ids)) {
+            result.success("删除分类成功");
+        } else {
+            result.fail("删除分类失败");
+        }
+        return result;
+    }
+
 }
