@@ -29,4 +29,6 @@ public interface PetCategoryService extends IService<PetCategory> {
     boolean updateUsefulById(Integer id);
 
     Page<PetCategory> getAllPageCate(Integer pageNum, Integer pageSize);
+
+    boolean deleteByIds(String ids);
 }

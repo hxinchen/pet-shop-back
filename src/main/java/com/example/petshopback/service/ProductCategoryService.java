@@ -28,4 +28,6 @@ public interface ProductCategoryService extends IService<ProductCategory> {
     boolean updateUsefulById(Integer id);
 
     Page<ProductCategory> getAllPageCate(Integer pageNum, Integer pageSize);
+
+    boolean deleteByIds(String ids);
 }
