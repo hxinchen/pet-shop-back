@@ -9,6 +9,7 @@ import com.example.petshopback.service.PetCategoryService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -73,6 +74,16 @@ public class PetCategoryServiceImpl extends ServiceImpl<PetCategoryMapper, PetCa
         QueryWrapper<PetCategory> queryWrapper = new QueryWrapper<>();
         Page<PetCategory> page = new Page<>(pageNum, pageSize);
         return this.page(page, queryWrapper);
+    }
+
+    @Override
+    public boolean deleteByIds(String ids) {
+        List<String> listIds = new ArrayList<>();
+        String[] aryIds = ids.split(",");
+        for(String id: aryIds){
+            listIds.add(id);
+        }
+        return this.removeByIds(listIds);
     }
 
     @Override
