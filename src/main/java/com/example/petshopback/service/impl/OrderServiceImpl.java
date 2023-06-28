@@ -106,7 +106,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
             Date date = DateUtil.parse(order.getCreateTime());
 //            new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date)
             //自动取消时间5分钟
-            order.setCancelTime(DateUtil.offset(date, DateField.MINUTE, 5));
+            order.setCancelTime(DateUtil.offset(date, DateField.MINUTE, 2));
             this.pushOrder(order);
             this.cancelOrder();
         }

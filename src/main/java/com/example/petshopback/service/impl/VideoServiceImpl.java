@@ -19,12 +19,12 @@ import org.springframework.stereotype.Service;
 public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements VideoService {
 
     @Override
-    public void addPetVideo(Integer petId, String url, String name) {
+    public Video addPetVideo(String url, String name) {
         Video video=new Video();
-        video.setPetId(petId);
         video.setVideoUrl(url);
         video.setVideoName(name);
         this.save(video);
+        return video;
     }
 
     @Override
@@ -39,7 +39,16 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
     }
 
     @Override
-    public Video getVideoById(Integer id) {
-        return this.getById(id);
+    public void updateVideo(Integer videoId, Integer petId) {
+        Video video = this.getById(videoId);
+        video.setPetId(petId);
+        this.updateById(video);
+    }
+
+    @Override
+    public Video getVideoByPetId(Integer id) {
+        QueryWrapper<Video> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("pet_id", id);
+        return this.getOne(queryWrapper);
     }
 }
