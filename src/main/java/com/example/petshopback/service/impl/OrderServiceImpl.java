@@ -85,6 +85,15 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     }
 
     @Override
+    public List<Order> getByUserId() {
+        String token = request.getHeader("token");
+        String userId = JwtUtil.validateToken(token);
+        QueryWrapper<Order> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", Integer.valueOf(userId));
+        return this.list(queryWrapper);
+    }
+
+    @Override
     public Order add(Double sumPrice, Integer isPay, Integer addressId) throws ParseException {
         Order order = new Order();
         String token = request.getHeader("token");
@@ -100,6 +109,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         //订单状态
         if (isPay == 1){//支付
             order.setStatus(2);
+
+
         }
         else if (isPay == 0) {//未支付
             order.setStatus(1);

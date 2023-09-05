@@ -9,6 +9,7 @@ import com.example.petshopback.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
+import com.example.petshopback.utils.Transform;
 
 import java.util.List;
 
@@ -41,6 +42,21 @@ public class ShopController {
         return result;
     }
 
+    @GetMapping("/getList")
+    public Result getList() {
+        Result result = new Result();
+        List<Shop> list = shopService.list();
+        System.out.println(list);
+        if (list != null) {
+            result.success("查询成功");
+            result.setData(list);
+        }
+        else {
+            result.fail("查询失败");
+        }
+        return result;
+    }
+
     // 查询全部商店
     @GetMapping("/getAll")
     public Result getAll(Integer pageNum, Integer pageSize) {
@@ -63,10 +79,13 @@ public class ShopController {
     @GetMapping("/getByUserId")
     public Result getByUserId() {
         Result result = new Result();
-        Shop shop = shopService.getShop();
+        List<Shop> shop = shopService.getShop();
+        Transform transform = new Transform();
+        // 输出
+        System.out.println(shop);
         if (shop != null) {
             result.success("查询成功");
-            result.setData(shop);
+            result.setData(transform.listToPage(shop, 1, 5));
         }
         else {
             result.fail("查询失败");

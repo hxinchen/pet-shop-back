@@ -8,6 +8,7 @@ import com.example.petshopback.mapper.ProductMapper;
 import com.example.petshopback.service.ProductService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+import com.example.petshopback.utils.Transform;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,12 +45,21 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     }
     @Override
     public Page<Product> getByCategory(Integer pageNum, Integer pageSize, Integer category) {
-        Page<Product> page = new Page<>(pageNum, pageSize);
+//        Page<Product> page = new Page<>(pageNum, pageSize);
         QueryWrapper<Product> queryWrapper = new QueryWrapper<>();
-        if (category == 0)
-            return this.page(page, queryWrapper);
-        queryWrapper.eq("category_id", category);
-        return this.page(page, queryWrapper);
+        Transform transform = new Transform();
+        List<Product> productList = new ArrayList<>();
+        if (category == 0) {
+            // 添加查询条件，查询stock>0的记录
+            queryWrapper.gt("stock", 0);
+            productList = this.list(queryWrapper);
+            return transform.listToPage(productList, pageNum, pageSize);
+        }
+//            return this.page(page, queryWrapper);
+        queryWrapper.gt("stock", 0).eq("category_id", category);
+//        return this.page(page, queryWrapper);
+        productList = this.list(queryWrapper);
+        return transform.listToPage(productList, pageNum, pageSize);
     }
 
 
@@ -77,6 +87,27 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         }
 
         return list;
+    }
+
+    @Override
+    public Product getByIdStock(Integer id) {
+        QueryWrapper<Product> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("id", id).gt("stock", 0);
+        return this.getOne(queryWrapper);
+    }
+
+    @Override
+    public boolean modifyStockByIds(String ids, Integer stock) {
+        String[] array = ids.split(",");
+        for (String id : array) {
+            Integer productId = Integer.valueOf(id);
+            Product product = this.getById(productId);
+            if (product != null) {
+                product.setStock(product.getStock() + stock);
+                this.updateById(product);
+            }
+        }
+        return true;
     }
 
 }

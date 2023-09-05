@@ -63,6 +63,23 @@ public class OrderController {
         return result;
     }
 
+    //根据用户userId查订单
+    @GetMapping( "/getByUserId")
+    public Result getByUserId() {
+        Result result = new Result();
+        //通过id查找
+        List<Order> list = orderService.getByUserId();
+//        System.out.println(list);
+        if (!list.isEmpty()) {
+            result.setData(list);
+            result.success("查询成功");
+        }
+        else {
+            result.fail("查询失败");
+        }
+        return result;
+    }
+
     //根据status查订单
     @GetMapping( "/getByStatus")
     public Result getByStatus(Integer status) {

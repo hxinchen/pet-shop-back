@@ -15,6 +15,8 @@ import java.util.List;
  */
 public interface OrderItemService extends IService<OrderItem> {
 
+    List<OrderItem> getDetail(String orderIds, Integer status);
+
     List<OrderItem> getByOrderId(Integer orderId);
 
     List<OrderItem> add(Integer orderId, Integer status, String ids, String nums, Integer isPet, String shopIds);
