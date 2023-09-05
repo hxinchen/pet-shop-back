@@ -28,4 +28,6 @@ public interface OrderService extends IService<Order> {
     Page<Order> getAll(Integer pageNum, Integer pageSize);
 
     List<Order> getByStatus(Integer status);
+
+    List<Order> getByUserId();
 }

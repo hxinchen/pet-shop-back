@@ -5,10 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.petshopback.entity.Pet;
 import com.example.petshopback.entity.Product;
 import com.example.petshopback.entity.Shop;
-import com.example.petshopback.service.FavorService;
-import com.example.petshopback.service.PetCategoryService;
-import com.example.petshopback.service.PetService;
-import com.example.petshopback.service.ShopService;
+import com.example.petshopback.service.*;
 import com.example.petshopback.utils.Result;
 import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +32,7 @@ public class PetController {
     private ShopService shopService;
 
     @Autowired
-    private FavorService favorService;
+    private VideoService videoService;
 
     // 新增
     @PostMapping("/add")
@@ -57,6 +54,8 @@ public class PetController {
         Pet pet = petService.getById(id);
         pet.put("cateName", petCategoryService.getById(pet.getCategoryId()).getName());
         pet.put("shopName", shopService.getById(pet.getShopId()).getName());
+        // 从视频表中查询该宠物的视频
+        pet.put("video", videoService.getVideoByPetId(id));
         result.setData(pet);
         result.success("查询宠物成功");
         return result;

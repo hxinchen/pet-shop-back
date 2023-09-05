@@ -2,7 +2,6 @@ package com.example.petshopback.service;
 
 import com.example.petshopback.entity.Video;
 import com.baomidou.mybatisplus.extension.service.IService;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * <p>
@@ -13,8 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @since 2023-06-09 10:14:35
  */
 public interface VideoService extends IService<Video> {
-    public void addPetVideo(Integer petId,String url,String name);
+    public Video addPetVideo(String url,String name);
     public void modifyPetVideo(Integer petId,String url,String name);
     //根据id查询视频
-    public Video getVideoById(Integer id);
+
+    void updateVideo(Integer videoId, Integer petId);
+
+    Video getVideoByPetId(Integer id);
 }

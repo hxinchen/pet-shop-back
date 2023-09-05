@@ -25,6 +25,22 @@ import java.util.List;
 public class OrderItemServiceImpl extends ServiceImpl<OrderItemMapper, OrderItem> implements OrderItemService {
     @Autowired
     private HttpServletRequest request;
+
+    @Override
+    public List<OrderItem> getDetail(String orderIds, Integer status) {
+        List<String> list = new ArrayList<>();
+        String[] array = orderIds.split(",");
+        for (String i:array) {
+            list.add(i);
+        }
+        QueryWrapper<OrderItem> queryWrapper = new QueryWrapper<>();
+        if (status == 0)
+            queryWrapper.in("order_id", list);
+        else
+            queryWrapper.in("order_id", list).eq("status", status);
+        return this.list(queryWrapper);
+    }
+
     @Override
     public List<OrderItem> getByOrderId(Integer orderId) {
         QueryWrapper<OrderItem> queryWrapper = new QueryWrapper<>();
@@ -36,8 +52,8 @@ public class OrderItemServiceImpl extends ServiceImpl<OrderItemMapper, OrderItem
     @Override
     public List<OrderItem> add(Integer orderId, Integer status, String ids, String nums, Integer isPet, String shopIds) {
 
-//        String token = request.getHeader("Authorization");
-//        String userId = JwtUtil.validateToken(token);
+//      String token = request.getHeader("Authorization");
+//      String userId = JwtUtil.validateToken(token);
         List<OrderItem> orderItems = new ArrayList<>();
 
         String[] arrayId = ids.split(",");

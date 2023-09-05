@@ -52,7 +52,7 @@ public class ProductController {
     @GetMapping("/getById")
     public Result getById(Integer id) {
         Result result = new Result();
-        Product product = productService.getById(id);
+        Product product = productService.getByIdStock(id);
         if (product == null) {
             result.fail("查询产品失败");
             return result;
@@ -65,7 +65,7 @@ public class ProductController {
         return result;
     }
 
-    // 根据ids查询产品
+    // 根据ids产品获取商店ids
     @GetMapping("/getShopIds")
     public Result getShopIds(String ids) {
         Result result = new Result();
@@ -98,6 +98,18 @@ public class ProductController {
             result.fail("修改产品失败");
         }
 
+        return result;
+    }
+
+    // 根据ids修改库存
+    @PostMapping("/modifyStockByIds")
+    public Result modifyStockByIds(String ids, int stock) {
+        Result result = new Result();
+        if (productService.modifyStockByIds(ids, stock)) {
+            result.success("修改产品库存成功");
+        } else {
+            result.fail("修改产品库存失败");
+        }
         return result;
     }
 
