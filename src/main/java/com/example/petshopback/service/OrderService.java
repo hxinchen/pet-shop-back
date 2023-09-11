@@ -30,4 +30,6 @@ public interface OrderService extends IService<Order> {
     List<Order> getByStatus(Integer status);
 
     List<Order> getByUserId();
+
+    void deleteByIds(String ids);
 }

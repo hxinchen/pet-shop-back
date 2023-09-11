@@ -2,6 +2,8 @@ package com.example.petshopback.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.petshopback.entity.Order;
+import com.example.petshopback.entity.OrderItem;
+import com.example.petshopback.service.OrderItemService;
 import com.example.petshopback.service.OrderService;
 import com.example.petshopback.service.UserAddressService;
 import com.example.petshopback.service.UserService;
@@ -34,7 +36,7 @@ public class OrderController {
     private UserService userService;
 
     @Autowired
-    private UserAddressService userAddressService;
+    private OrderItemService orderItemService;
 
     // 新增
     @PostMapping("/add")
@@ -94,6 +96,33 @@ public class OrderController {
         else {
             result.fail("查询失败");
         }
+        return result;
+    }
+
+
+
+    //取消订单
+    @PostMapping("/cancel")
+    public Result cancel(Integer orderId, String reason){
+        Result result = new Result();
+        Order order = orderService.cancel(orderId, reason);
+        List<OrderItem> list = orderItemService.getByOrderId(orderId);
+        for (OrderItem orderItem: list) {//取消该订单下的所有订单详情
+            orderItem.setStatus(5);
+            orderItemService.updateById(orderItem);
+        }
+        result.setData(order);
+        result.success("取消成功");
+        return result;
+    }
+
+    //删除
+    @PostMapping("/deleteByIds")
+    public Result deleteByIds(String ids){
+        Result result = new Result();
+
+        orderService.deleteByIds(ids);
+        result.success("删除成功");
         return result;
     }
 }
