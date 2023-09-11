@@ -3,10 +3,12 @@ package com.example.petshopback.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.petshopback.entity.Pet;
+import com.example.petshopback.entity.PetCategory;
 import com.example.petshopback.entity.Product;
 import com.example.petshopback.mapper.ProductMapper;
-import com.example.petshopback.service.ProductService;
+import com.example.petshopback.service.*;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.petshopback.utils.Transform;
 
@@ -23,6 +25,19 @@ import java.util.List;
  */
 @Service
 public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> implements ProductService {
+
+    @Autowired
+    private PetService petService;
+    @Autowired
+    private PetCategoryService petCategoryService;
+    @Autowired
+    private ProductCategoryService productCategoryService;
+    @Autowired
+    private ShopService shopService;
+    @Autowired
+    private  UserAddressService userAddressService;
+
+
     @Override
     public Page<Product> pageByShopId(Integer pageNum, Integer pageSize, Integer shopId) {
         Page<Product> page = new Page<>(pageNum, pageSize);
@@ -110,4 +125,44 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         return true;
     }
 
+    @Override
+    public List<Object> getByIds(String ids, String isPet) {
+        List<Object> list = new ArrayList<>();
+
+        String[] array = ids.split(",");
+        String[] arrayIsPet = isPet.split(",");
+        // 根据是否是宠物周边，分别查询
+        for (Integer i = 0; i < array.length; i++) {
+            if (arrayIsPet[i].equals("1")) {
+                Pet pet = petService.getById(Integer.valueOf(array[i]));
+                if (pet != null) {
+                    pet.put("cateName", petCategoryService.getById(pet.getCategoryId()).getName());
+                    pet.put("shopName", shopService.getById(pet.getShopId()).getName());
+//                    pet.put("address", userAddressService.getDefault());
+                    list.add(pet);
+                }
+            } else {
+                Product product = this.getById(Integer.valueOf(array[i]));
+                if (product != null) {
+                    product.put("cateName", productCategoryService.getById(product.getCategoryId()).getName());
+                    product.put("shopName", shopService.getById(product.getShopId()).getName());
+//                    product.put("address", userAddressService.getDefault());
+                    list.add(product);
+                }
+            }
+//            if (arrayIsPet[Integer.valueOf(i)].equals("1")) {
+//                Pet pet = petService.getById(Integer.valueOf(i));
+//                if (pet != null) {
+//                    list.add(pet);
+//                }
+//            } else {
+//                Product product = this.getById(Integer.valueOf(i));
+//                if (product != null) {
+//                    list.add(product);
+//                }
+//            }
+//            list.add(this.getById(Integer.valueOf(i)));
+        }
+        return list;
+    }
 }

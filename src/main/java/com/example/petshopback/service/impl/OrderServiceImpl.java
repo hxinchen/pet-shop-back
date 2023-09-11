@@ -10,8 +10,10 @@ import com.example.petshopback.mapper.OrderMapper;
 import com.example.petshopback.service.OrderItemService;
 import com.example.petshopback.service.OrderService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.petshopback.service.ProductService;
 import com.example.petshopback.utils.DateTool;
 import com.example.petshopback.utils.JwtUtil;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
@@ -19,9 +21,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.DelayQueue;
 
 /**
@@ -39,6 +39,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     private HttpServletRequest request;
     @Autowired
     private OrderItemService orderItemService;
+
+    @Autowired
+    private ProductService productService;
+
     //    private StringRedisTemplate redisTemplate;
     //是否自动取消订单
     private int isStarted = 1;
@@ -94,6 +98,17 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     }
 
     @Override
+    public void deleteByIds(String ids) {//根据Id删除
+        //        System.out.println(ids);
+        List<String> list = new ArrayList<>();
+        String[] array = ids.split(",");
+        for (String i:array) {
+            list.add(i);
+        }
+        this.removeByIds(list);
+    }
+
+    @Override
     public Order add(Double sumPrice, Integer isPay, Integer addressId) throws ParseException {
         Order order = new Order();
         String token = request.getHeader("token");
@@ -109,21 +124,17 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         //订单状态
         if (isPay == 1){//支付
             order.setStatus(2);
-
-
         }
         else if (isPay == 0) {//未支付
             order.setStatus(1);
             Date date = DateUtil.parse(order.getCreateTime());
 //            new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date)
             //自动取消时间5分钟
-            order.setCancelTime(DateUtil.offset(date, DateField.MINUTE, 2));
+            order.setCancelTime(DateUtil.offset(date, DateField.MINUTE, 1));
             this.pushOrder(order);
             this.cancelOrder();
         }
         this.save(order);
-
-
 
         return order;
     }
@@ -145,6 +156,11 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
                         }
 //                        queue.remove(order);
                         System.out.println("订单：" + order.getNo() + "付款超时，自动取消，当前时间：" + DateTool.getCurrTime());
+                        // 将库存加回去
+                        StringJoiner joiner = new StringJoiner(",");
+                        for (OrderItem orderItem: list)
+                            joiner.add(String.valueOf(orderItem.getProductId()));
+                        productService.modifyStockByIds(joiner.toString(), 1);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

@@ -16,6 +16,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -92,23 +97,22 @@ public class OrderItemController {
         //通过id查找
         List<OrderItem> list = orderItemService.getDetail(orderIds, status);
         System.out.println(list);
-        String token = request.getHeader("Authorization");
-//        System.out.println("token" + token);
-        String userId = JwtUtil.validateToken(token);
-        for (OrderItem OrderItem : list) {
-            Order order = orderService.getById(OrderItem.getOrderId());
+        for (OrderItem orderItem : list) {
+            Order order = orderService.getById(orderItem.getOrderId());
 //            if (order.getStatus() == -1) //追评
 //                OrderItem.put("commentId", commentService.getByBookId(OrderItem.getBookId()));
-            OrderItem.put("createTime", order.getCreateTime());
-            OrderItem.put("no", order.getNo());
+            orderItem.put("createTime", order.getCreateTime());
+            orderItem.put("no", order.getNo());
+            orderItem.put("totalPrice", order.getSumPrice());
             if (order.getCancelTime() != null)
-                OrderItem.put("cancelTime", order.getCancelTime().getTime());
+                orderItem.put("cancelTime", order.getCancelTime().getTime());
             else
-                OrderItem.put("cancelTime", 0);
-            OrderItem.put("cancelReason", order.getCancelReason());
+                orderItem.put("cancelTime", 0);
+            orderItem.put("cancelReason", order.getCancelReason());
 //            OrderItem.put("status", order.getStatus());
-            OrderItem.put("address", userAddressService.getDefault());
+            orderItem.put("address", userAddressService.getDefault());
         }
+
         if (!list.isEmpty()) {
             result.setData(list);
             result.success("查询成功");

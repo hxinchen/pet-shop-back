@@ -65,6 +65,20 @@ public class ProductController {
         return result;
     }
 
+    // 根据ids查询产品，或者宠物
+    @GetMapping("/getByIds")
+    public Result getByIds(String ids, String isPet) {
+        Result result = new Result();
+        List<Object> list = productService.getByIds(ids, isPet);
+        if (list == null) {
+            result.fail("查询产品失败");
+            return result;
+        }
+        result.setData(list);
+        result.success("查询产品成功");
+        return result;
+    }
+
     // 根据ids产品获取商店ids
     @GetMapping("/getShopIds")
     public Result getShopIds(String ids) {
