@@ -3,6 +3,7 @@ package com.example.petshopback.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.petshopback.entity.Pet;
+import com.example.petshopback.entity.ProductCategory;
 import com.example.petshopback.entity.Shop;
 import com.example.petshopback.mapper.ShopMapper;
 import com.example.petshopback.service.ShopService;
@@ -48,13 +49,14 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements Sh
     }
 
     @Override
-    public Shop getShop() {
+    public List<Shop> getShop() {
         String token = request.getHeader("token");
 
         String userId = JwtUtil.validateToken(token);
         QueryWrapper<Shop> queryWrapper = new QueryWrapper<>();
 //        queryWrapper.eq("user_id", Integer.valueOf(userId));
-        queryWrapper.eq("user_id", 1227);
-        return getOne(queryWrapper);
+        queryWrapper.eq("user_id", userId);
+        return this.list(queryWrapper);
     }
+
 }

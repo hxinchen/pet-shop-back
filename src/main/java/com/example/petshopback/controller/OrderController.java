@@ -2,6 +2,8 @@ package com.example.petshopback.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.petshopback.entity.Order;
+import com.example.petshopback.entity.OrderItem;
+import com.example.petshopback.service.OrderItemService;
 import com.example.petshopback.service.OrderService;
 import com.example.petshopback.service.UserAddressService;
 import com.example.petshopback.service.UserService;
@@ -34,7 +36,7 @@ public class OrderController {
     private UserService userService;
 
     @Autowired
-    private UserAddressService userAddressService;
+    private OrderItemService orderItemService;
 
     // 新增
     @PostMapping("/add")
@@ -64,6 +66,23 @@ public class OrderController {
         return result;
     }
 
+    //根据用户userId查订单
+    @GetMapping( "/getByUserId")
+    public Result getByUserId() {
+        Result result = new Result();
+        //通过id查找
+        List<Order> list = orderService.getByUserId();
+//        System.out.println(list);
+        if (!list.isEmpty()) {
+            result.setData(list);
+            result.success("查询成功");
+        }
+        else {
+            result.fail("查询失败");
+        }
+        return result;
+    }
+
     //根据status查订单
     @GetMapping( "/getByStatus")
     public Result getByStatus(Integer status) {
@@ -78,6 +97,45 @@ public class OrderController {
         else {
             result.fail("查询失败");
         }
+        return result;
+    }
+
+    // 退款
+    @PostMapping("/refund")
+    public Result refund(Integer orderId, String reason){
+        Result result = new Result();
+        Order order = orderService.refund(orderId, reason);
+        List<OrderItem> list = orderItemService.getByOrderId(orderId);
+        for (OrderItem orderItem: list) {//退款该订单下的所有订单详情
+            orderItem.setStatus(7);
+            orderItemService.updateById(orderItem);
+        }
+        result.setData(order);
+        result.success("退款成功");
+        return result;
+    }
+
+    //取消订单
+    @PostMapping("/cancel")
+    public Result cancel(Integer orderId, String reason){
+        Result result = new Result();
+        Order order = orderService.cancel(orderId, reason);
+        List<OrderItem> list = orderItemService.getByOrderId(orderId);
+        for (OrderItem orderItem: list) { //取消该订单下的所有订单详情
+            orderItem.setStatus(6);
+            orderItemService.updateById(orderItem);
+        }
+        result.success("取消成功");
+        return result;
+    }
+
+    //删除
+    @PostMapping("/deleteByIds")
+    public Result deleteByIds(String ids){
+        Result result = new Result();
+
+        orderService.deleteByIds(ids);
+        result.success("删除成功");
         return result;
     }
 }

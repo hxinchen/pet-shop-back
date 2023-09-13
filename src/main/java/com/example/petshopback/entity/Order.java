@@ -53,8 +53,10 @@ public class Order extends BaseEntity implements Delayed {
 
     /**
      * 订单状态
+     * 1可以取消
+     * 2-3-4可以退款
      */
-    @ApiModelProperty(value = "订单状态，0--待付款，1--待发货，2--待收货，3--待评价，4--已完成，5--已取消")
+    @ApiModelProperty(value = "订单状态:1-待付款2-待发货3-待收货4-待评价5-已评价6-已取消7-退款")
     private Integer status;
 
     /**
@@ -75,6 +77,13 @@ public class Order extends BaseEntity implements Delayed {
      */
     @ApiModelProperty(value = "地址id")
     private Integer addressId;
+
+    /**
+     * 最后一个订单详情退款时间
+     */
+    @ApiModelProperty(value = "最后一个订单详情退款时间")
+    private String refundTime;
+
 
     @Override
     public long getDelay(TimeUnit unit) {

@@ -1,6 +1,7 @@
 package com.example.petshopback.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.petshopback.entity.ProductCategory;
 import com.example.petshopback.entity.Shop;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -20,5 +21,6 @@ public interface ShopService extends IService<Shop> {
 
     Page<Shop> getAllShop(Integer pageNum, Integer pageSize);
 
-    Shop getShop();
+    List<Shop> getShop();
+
 }

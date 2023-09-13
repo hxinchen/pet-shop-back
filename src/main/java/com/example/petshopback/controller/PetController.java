@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.petshopback.entity.Pet;
 import com.example.petshopback.entity.Product;
 import com.example.petshopback.entity.Shop;
-import com.example.petshopback.entity.Video;
 import com.example.petshopback.service.*;
 import com.example.petshopback.utils.Result;
 import io.swagger.models.auth.In;
@@ -28,13 +27,12 @@ public class PetController {
     private PetService petService;
     @Autowired
     private PetCategoryService petCategoryService;
-    @Autowired
-    private VideoService videoService;
+
     @Autowired
     private ShopService shopService;
 
     @Autowired
-    private FavorService favorService;
+    private VideoService videoService;
 
     // 新增
     @PostMapping("/add")
@@ -56,8 +54,8 @@ public class PetController {
         Pet pet = petService.getById(id);
         pet.put("cateName", petCategoryService.getById(pet.getCategoryId()).getName());
         pet.put("shopName", shopService.getById(pet.getShopId()).getName());
-        Video video = videoService.getById(pet.getVideoId());
-        pet.put("url", video.getVideoUrl());
+        // 从视频表中查询该宠物的视频
+        pet.put("video", videoService.getVideoByPetId(id));
         result.setData(pet);
         result.success("查询宠物成功");
         return result;
@@ -73,6 +71,15 @@ public class PetController {
             result.fail("修改宠物失败");
         }
 
+        return result;
+    }
+
+    // 更新useful
+    @PostMapping("/updateUseful")
+    public Result updateUseful(Integer petId, Boolean useful) {
+        Result result = new Result();
+        petService.updateUseful(petId, useful);
+        result.success("更新useful成功");
         return result;
     }
 

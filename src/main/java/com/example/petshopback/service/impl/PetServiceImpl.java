@@ -37,22 +37,13 @@ public class PetServiceImpl extends ServiceImpl<PetMapper, Pet> implements PetSe
             System.out.println("宠物已存在，新增宠物失败");
             return false;
         }
-        Pet pet1 = new Pet();
-        pet1.setShopId(pet.getShopId());
-        pet1.setName(pet.getName());
-        pet1.setAge(pet.getAge());
-        pet1.setShopId(pet.getShopId());
-        pet1.setDescription(pet.getDescription());
-        pet1.setBreed(pet.getBreed());
-        pet1.setHealth(pet.getHealth());
-        pet1.setCategoryId(pet.getCategoryId());
-        pet1.setPrice(pet.getPrice());
-        pet1.setImg(pet.getImg());
+        Pet pet1 = pet;
 
         pet1.setCreateTime(DateTool.getCurrTime());
         pet1.setBirthday(DateTool.getCurrDay());
-        save(pet1);
-        return true;
+
+        System.out.println("id:"+ pet1.getId());
+        return save(pet1);
     }
 
     @Override
@@ -117,5 +108,12 @@ public class PetServiceImpl extends ServiceImpl<PetMapper, Pet> implements PetSe
             list.add(i);
         }
         return this.removeByIds(list);
+    }
+
+    @Override
+    public void updateUseful(Integer petId, Boolean useful) {
+        Pet pet = getById(petId);
+        pet.setUseful(useful);
+        updateById(pet);
     }
 }

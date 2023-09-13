@@ -26,4 +26,10 @@ public interface ProductService extends IService<Product> {
     boolean deleteByIds(String ids);
 
     List<Integer> getShopIds(String ids);
+
+    Product getByIdStock(Integer id);
+
+    boolean modifyStockByIds(String ids, Integer stock);
+
+    List<Object> getByIds(String ids, String isPet);
 }

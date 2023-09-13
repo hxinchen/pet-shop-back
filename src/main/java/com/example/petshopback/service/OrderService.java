@@ -28,4 +28,10 @@ public interface OrderService extends IService<Order> {
     Page<Order> getAll(Integer pageNum, Integer pageSize);
 
     List<Order> getByStatus(Integer status);
+
+    List<Order> getByUserId();
+
+    void deleteByIds(String ids);
+    Order updateOrder(Integer orderId, Integer status);
+    Order refund(Integer orderId, String reason);
 }
