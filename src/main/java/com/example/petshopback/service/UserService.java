@@ -26,4 +26,6 @@ public interface UserService extends IService<User> {
     User updateUser(User user);
 
     void deleteByIds(String ids);
+
+    Boolean updateAvatar(Integer userId, String avatar);
 }

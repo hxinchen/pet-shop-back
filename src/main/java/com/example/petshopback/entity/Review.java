@@ -40,7 +40,7 @@ public class Review extends BaseEntity implements Serializable {
      * 评分0-5
      */
     @ApiModelProperty(value = "评分，取值范围为0-5")
-    private Double rate;
+    private Integer rate;
 
     /**
      * 发出评价的用户
@@ -49,14 +49,27 @@ public class Review extends BaseEntity implements Serializable {
     private Integer userId;
 
     /**
-     * 订单id
+     * 订单商品id
      */
-    @ApiModelProperty(value = "订单id")
-    private Integer orderId;
+    @ApiModelProperty(value = "订单商品id")
+    private Integer orderItemId;
 
     /**
      * 发出评价的时间
      */
     @ApiModelProperty(value = "发出评价的时间")
     private String createTime;
+
+    /**
+     * 点赞数
+     */
+    @ApiModelProperty(value = "点赞数")
+    private Integer likes;
+    /**
+     * 是否宠物
+     * 0-否
+     * 1-是
+     */
+    @ApiModelProperty(value = "是否宠物")
+    private Integer isPet;
 }

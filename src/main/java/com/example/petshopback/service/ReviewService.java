@@ -3,6 +3,8 @@ package com.example.petshopback.service;
 import com.example.petshopback.entity.Review;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  * 评价表 服务类
@@ -13,4 +15,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ReviewService extends IService<Review> {
 
+    void add(Review review);
+
+    void delete(int id);
+
+    void like(int id);
+
+    List<Review> getByShopId(int shopId,int productId);
 }

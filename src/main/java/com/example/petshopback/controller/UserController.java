@@ -7,11 +7,15 @@ import com.example.petshopback.entity.User;
 import com.example.petshopback.service.UserService;
 import com.example.petshopback.utils.JwtUtil;
 import com.example.petshopback.utils.Result;
+import com.example.petshopback.utils.fileUpload;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
@@ -28,6 +32,24 @@ public class UserController {
     private UserService userService;
     @Autowired
     private HttpServletRequest request;
+
+    /**
+     * 修改头像
+     */
+    @PostMapping("/updateAvatar")
+public Result updateAvatar(@RequestParam(value = "file") MultipartFile file, Integer userId) {
+        Result result = new Result();
+        fileUpload fileUpload=new fileUpload();
+        String url= fileUpload.upload(file);
+        if (userService.updateAvatar(userId, url)) {
+            result.success("修改头像成功");
+            result.setData(url);
+        } else {
+            result.fail("修改头像失败");
+        }
+        return result;
+    }
+
     /**
      * 用户注册
      */
