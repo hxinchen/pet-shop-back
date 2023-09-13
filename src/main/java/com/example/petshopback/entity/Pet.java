@@ -97,4 +97,10 @@ public class Pet extends BaseEntity implements Serializable {
      */
     @ApiModelProperty(value = "视频id")
     private String videoId;
+
+    /**
+     * 可用状态
+     */
+    @ApiModelProperty(value = "状态")
+    private Boolean useful;
 }

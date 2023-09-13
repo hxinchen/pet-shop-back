@@ -99,7 +99,20 @@ public class OrderController {
         return result;
     }
 
-
+    // 退款
+    @PostMapping("/refund")
+    public Result refund(Integer orderId, String reason){
+        Result result = new Result();
+        Order order = orderService.refund(orderId, reason);
+        List<OrderItem> list = orderItemService.getByOrderId(orderId);
+        for (OrderItem orderItem: list) {//退款该订单下的所有订单详情
+            orderItem.setStatus(7);
+            orderItemService.updateById(orderItem);
+        }
+        result.setData(order);
+        result.success("退款成功");
+        return result;
+    }
 
     //取消订单
     @PostMapping("/cancel")
@@ -107,11 +120,10 @@ public class OrderController {
         Result result = new Result();
         Order order = orderService.cancel(orderId, reason);
         List<OrderItem> list = orderItemService.getByOrderId(orderId);
-        for (OrderItem orderItem: list) {//取消该订单下的所有订单详情
-            orderItem.setStatus(5);
+        for (OrderItem orderItem: list) { //取消该订单下的所有订单详情
+            orderItem.setStatus(6);
             orderItemService.updateById(orderItem);
         }
-        result.setData(order);
         result.success("取消成功");
         return result;
     }
