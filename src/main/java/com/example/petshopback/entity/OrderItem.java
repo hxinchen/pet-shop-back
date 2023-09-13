@@ -59,4 +59,22 @@ public class OrderItem extends BaseEntity implements Serializable {
      */
     @ApiModelProperty(value = "状态")
     private Integer status;
+
+    /**
+     * 退款原因
+     */
+    @ApiModelProperty(value = "退款原因")
+    private String refundReason;
+
+    /**
+     * 退款时间
+     */
+    @ApiModelProperty(value = "退款时间")
+    private String refundTime;
+
+    /**
+     * 退款审核状态 0-未审核 1-审核通过 2-审核不通过
+     */
+    @ApiModelProperty(value = "退款审核状态")
+    private Integer refundStatus;
 }

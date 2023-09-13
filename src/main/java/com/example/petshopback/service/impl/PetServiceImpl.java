@@ -109,4 +109,11 @@ public class PetServiceImpl extends ServiceImpl<PetMapper, Pet> implements PetSe
         }
         return this.removeByIds(list);
     }
+
+    @Override
+    public void updateUseful(Integer petId, Boolean useful) {
+        Pet pet = getById(petId);
+        pet.setUseful(useful);
+        updateById(pet);
+    }
 }

@@ -74,6 +74,15 @@ public class PetController {
         return result;
     }
 
+    // 更新useful
+    @PostMapping("/updateUseful")
+    public Result updateUseful(Integer petId, Boolean useful) {
+        Result result = new Result();
+        petService.updateUseful(petId, useful);
+        result.success("更新useful成功");
+        return result;
+    }
+
     //根据ids删除宠物
     @PostMapping("/deleteByIds")
     public Result deleteByIds(String ids){

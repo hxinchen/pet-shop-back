@@ -22,4 +22,6 @@ public interface PetService extends IService<Pet> {
     Pet addVideo(Integer petId,Integer videoId);
 
     boolean deleteByIds(String ids);
+
+    void updateUseful(Integer petId, Boolean useful);
 }
