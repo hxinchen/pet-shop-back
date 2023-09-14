@@ -51,7 +51,7 @@ public class Review extends BaseEntity implements Serializable {
     /**
      * 订单商品id
      */
-    @ApiModelProperty(value = "订单商品id")
+    @ApiModelProperty(value = "订单中商品的id")
     private Integer orderItemId;
 
     /**

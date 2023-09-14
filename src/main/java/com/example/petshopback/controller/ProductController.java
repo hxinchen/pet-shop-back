@@ -160,5 +160,15 @@ public class ProductController {
         return result;
     }
 
-
+    //检查商品库存
+    @GetMapping("/checkStock")
+    public Result checkStock(Integer productId) {
+        Result result = new Result();
+        if (productService.checkStock(productId)) {
+            result.success("库存充足");
+        } else {
+            result.fail("库存不足");
+        }
+        return result;
+    }
 }

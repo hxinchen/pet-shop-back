@@ -165,4 +165,15 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         }
         return list;
     }
+
+    @Override
+    public boolean checkStock(Integer id) {
+        Product product = this.getById(id);
+        if (product != null) {
+            if (product.getStock() > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -6,9 +6,11 @@ import com.example.petshopback.mapper.ReviewMapper;
 import com.example.petshopback.service.*;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.petshopback.utils.DateTool;
+import com.example.petshopback.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,10 +32,19 @@ public class ReviewServiceImpl extends ServiceImpl<ReviewMapper, Review> impleme
     private PetService petService;
     @Autowired
     private OrderItemService orderItemService;
+    @Autowired
+    private HttpServletRequest request;
+
     @Override
-    public void add(Review review) {
+    public void add(Review review, int orderId) {
+        String token = request.getHeader("token");
+        String userId = JwtUtil.validateToken(token);
         review.setCreateTime(DateTool.getCurrTime());
         review.setLikes(0);
+        review.setUserId(Integer.parseInt(userId));
+        //修改订单状态 未评价4->已评价5
+        orderItemService.update(orderId,review.getOrderItemId(), 4);
+
         this.save(review);
 
     }

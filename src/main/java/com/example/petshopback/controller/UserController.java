@@ -248,4 +248,18 @@ public Result updateAvatar(@RequestParam(value = "file") MultipartFile file, Int
         }
         return result;
     }
+    //获取用户id
+    @GetMapping("/getId")
+    public Result getId() {
+        Result result = new Result();
+        String token = request.getHeader("token");
+        String userId = JwtUtil.validateToken(token);
+        if (StringUtils.isBlank(userId)) {
+            result.fail("Token无效，请重新登录");
+            return result;
+        }
+        result.setData(userId);
+        result.success("查询成功");
+        return result;
+    }
 }

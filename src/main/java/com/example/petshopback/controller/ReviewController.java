@@ -29,9 +29,15 @@ public class ReviewController {
 
     //新增评论
     @PostMapping("/add")
-    public Result add(@RequestBody Review review){
+    public Result add( int shopId,String comment,int rate,int orderItemId, int isPet, int orderId){
         Result result =new Result();
-        reviewService.add(review);
+        Review review =new Review();
+        review.setShopId(shopId);
+        review.setComment(comment);
+        review.setRate(rate);
+        review.setOrderItemId(orderItemId);
+        review.setIsPet(isPet);
+        reviewService.add(review,orderId);
 
         result.success("评论成功");
        return result;

@@ -62,6 +62,7 @@ public class OrderItemServiceImpl extends ServiceImpl<OrderItemMapper, OrderItem
 
     @Override
     public OrderItem update(Integer orderId, Integer proId, Integer status) {
+
         QueryWrapper<OrderItem> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("order_id", orderId).eq("product_id", proId);
         OrderItem orderItem = this.getOne(queryWrapper);

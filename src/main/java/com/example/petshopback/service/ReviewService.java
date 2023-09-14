@@ -15,7 +15,7 @@ import java.util.List;
  */
 public interface ReviewService extends IService<Review> {
 
-    void add(Review review);
+    void add(Review review ,int orderId);
 
     void delete(int id);
 
