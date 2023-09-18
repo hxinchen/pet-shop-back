@@ -63,18 +63,15 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 //        Page<Product> page = new Page<>(pageNum, pageSize);
         QueryWrapper<Product> queryWrapper = new QueryWrapper<>();
         Transform transform = new Transform();
-        List<Product> productList = new ArrayList<>();
-        if (category == 0) {
-            // 添加查询条件，查询stock>0的记录
-            queryWrapper.gt("stock", 0);
-            productList = this.list(queryWrapper);
-            return transform.listToPage(productList, pageNum, pageSize);
+        if (category > 0) {
+            queryWrapper.eq("category_id", category);
         }
-//            return this.page(page, queryWrapper);
-        queryWrapper.gt("stock", 0).eq("category_id", category);
-//        return this.page(page, queryWrapper);
-        productList = this.list(queryWrapper);
-        return transform.listToPage(productList, pageNum, pageSize);
+        //return this.page(page, queryWrapper);
+        queryWrapper.gt("stock", 0);
+        //按照访问量降序排列
+        queryWrapper.orderByDesc("access_count");
+        //return this.page(page, queryWrapper);
+        return transform.listToPage(this.list(queryWrapper), pageNum, pageSize);
     }
 
 
@@ -175,5 +172,14 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
             }
         }
         return false;
+    }
+
+    @Override
+    public void addAccessCount(Integer id) {
+        Product product = this.getById(id);
+        if (product != null) {
+            product.setAccessCount(product.getAccessCount() + 1);
+            this.updateById(product);
+        }
     }
 }

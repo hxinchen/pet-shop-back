@@ -76,6 +76,8 @@ public class PetServiceImpl extends ServiceImpl<PetMapper, Pet> implements PetSe
     public Page<Pet> getByCategory(Integer pageNum, Integer pageSize, Integer category) {
         Page<Pet> page = new Page<>(pageNum, pageSize);
         QueryWrapper<Pet> queryWrapper = new QueryWrapper<>();
+        //按访问量降序排列
+        queryWrapper.orderByDesc("access_count");
         if (category == 0)
             return this.page(page, queryWrapper);
         queryWrapper.eq("category_id", category);
@@ -114,6 +116,13 @@ public class PetServiceImpl extends ServiceImpl<PetMapper, Pet> implements PetSe
     public void updateUseful(Integer petId, Boolean useful) {
         Pet pet = getById(petId);
         pet.setUseful(useful);
+        updateById(pet);
+    }
+
+    @Override
+    public void addAccessCount(Integer id) {
+        Pet pet = getById(id);
+        pet.setAccessCount(pet.getAccessCount() + 1);
         updateById(pet);
     }
 }
