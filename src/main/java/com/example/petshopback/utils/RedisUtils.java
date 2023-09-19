@@ -1,5 +1,6 @@
 
 package com.example.petshopback.utils;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.DataType;
 import org.springframework.data.redis.core.Cursor;
@@ -381,6 +382,9 @@ public class RedisUtils {
     public void hPut(String key, String hashKey, String value) {
         redisTemplate.opsForHash().put(key, hashKey, value);
     }
+    public void hPut(String key, String hashKey, Integer value) {
+        redisTemplate.opsForHash().put(key, hashKey, value);
+    }
 
     public void hPutAll(String key, Map<String, String> maps) {
         redisTemplate.opsForHash().putAll(key, maps);
@@ -409,6 +413,14 @@ public class RedisUtils {
         return redisTemplate.opsForHash().delete(key, fields);
     }
 
+    /**
+     * 删除哈希表key
+     * @param key
+     * @return
+     */
+    public Boolean hDeleteKey(String key) {
+        return redisTemplate.opsForHash().getOperations().delete(key);
+    }
     /**
      * 查看哈希表 key 中，指定的字段是否存在
      *
@@ -1018,7 +1030,9 @@ public class RedisUtils {
     public Boolean zAdd(String key, String value, double score) {
         return redisTemplate.opsForZSet().add(key, value, score);
     }
-
+    public Boolean zAdd(String key, String value, long score) {
+        return redisTemplate.opsForZSet().add(key, value, score);
+    }
     /**
      *
      * @param key
@@ -1030,7 +1044,7 @@ public class RedisUtils {
     }
 
     /**
-     *
+     *删除指定成员
      * @param key
      * @param values
      * @return
