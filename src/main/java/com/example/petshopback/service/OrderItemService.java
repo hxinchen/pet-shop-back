@@ -19,9 +19,11 @@ public interface OrderItemService extends IService<OrderItem> {
     List<OrderItem> getDetail(String orderIds, Integer status);
 
     List<OrderItem> getByOrderId(Integer orderId);
-    List<OrderItem> getByOrderIdStatus(Integer orderId, Integer status);
+    Boolean checkStatus(Integer orderId, Integer status);
     OrderItem update(Integer orderId, Integer proId, Integer status);
     List<OrderItem> add(Integer orderId, Integer status, String ids, String nums, Integer isPet, String shopIds);
 
-    void applyRefund(Integer orderId, Integer status, Integer proId, Boolean isPet, String reason);
+    void applyRefund(Integer orderId, Integer proId, Boolean isPet, String reason);
+
+    OrderItem checkRefund(Integer orderId, Integer refundStatus, Integer proId, Integer isPet);
 }

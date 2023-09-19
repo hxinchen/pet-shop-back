@@ -11,7 +11,7 @@ import com.example.petshopback.service.VideoService;
 import com.example.petshopback.utils.DateTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import com.example.petshopback.utils.Transform;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,10 +76,17 @@ public class PetServiceImpl extends ServiceImpl<PetMapper, Pet> implements PetSe
     public Page<Pet> getByCategory(Integer pageNum, Integer pageSize, Integer category) {
         Page<Pet> page = new Page<>(pageNum, pageSize);
         QueryWrapper<Pet> queryWrapper = new QueryWrapper<>();
+//         queryWrapper.eq("category_id", category).eq("useful", 1);
+//         petList = this.list(queryWrapper);
+//         return transform.listToPage(petList, pageNum, pageSize);
+        
         //按访问量降序排列
         queryWrapper.orderByDesc("access_count");
-        if (category == 0)
+      
+        queryWrapper.eq("useful", 1);
+        if (category == 0) { //全部
             return this.page(page, queryWrapper);
+        }
         queryWrapper.eq("category_id", category);
         return this.page(page, queryWrapper);
     }
@@ -113,9 +120,9 @@ public class PetServiceImpl extends ServiceImpl<PetMapper, Pet> implements PetSe
     }
 
     @Override
-    public void updateUseful(Integer petId, Boolean useful) {
+    public void updateUseful(Integer petId) {
         Pet pet = getById(petId);
-        pet.setUseful(useful);
+        pet.setUseful(!pet.getUseful());
         updateById(pet);
     }
 

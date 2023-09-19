@@ -74,6 +74,14 @@ public class UserAddressServiceImpl extends ServiceImpl<UserAddressMapper, UserA
     }
 
     @Override
+    public UserAddress getByUserId(Integer userId) {
+        QueryWrapper<UserAddress> userAddressQueryWrapper = new QueryWrapper<>();
+        userAddressQueryWrapper.eq("user_id", userId).eq("is_default", true);
+        return this.getOne(userAddressQueryWrapper);
+    }
+
+
+    @Override
     public UserAddress getDefault() {
         QueryWrapper<UserAddress> userAddressQueryWrapper = new QueryWrapper<>();
         String token = request.getHeader("token");
