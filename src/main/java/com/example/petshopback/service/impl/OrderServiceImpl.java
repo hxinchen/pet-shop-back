@@ -13,7 +13,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.petshopback.service.ProductService;
 import com.example.petshopback.utils.DateTool;
 import com.example.petshopback.utils.JwtUtil;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
@@ -68,6 +67,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     public Page<Order> getAll(Integer pageNum, Integer pageSize) {
         Page<Order> page = new Page<>(pageNum, pageSize);
         QueryWrapper<Order> queryWrapper = new QueryWrapper<>();
+        // 按照表中的createTime降序排列
+        queryWrapper.orderByDesc("create_time");
         return this.page(page, queryWrapper);
     }
 
@@ -113,11 +114,12 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     public Order updateOrder(Integer orderId, Integer status) {
         String token = request.getHeader("token");
 //        System.out.println("token" + token);
-        String userId = JwtUtil.validateToken(token);
+//        String userId = JwtUtil.validateToken(token);
         QueryWrapper<Order> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("id", orderId).eq("user_id", Integer.valueOf(userId));
+        queryWrapper.eq("id", orderId);
 
         Order order = this.getOne(queryWrapper);
+
             if (order.getStatus() == 1) {//继续付款，从超时队列里删除
                 order.setCancelTime(null);
                 for (Order q:queue)
@@ -126,26 +128,39 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
                 // 将对应全部订单详情状态改为待发货--2
                 List<OrderItem> list = orderItemService.getByOrderId(order.getId());
                 for (OrderItem OrderItem: list) {//更新该订单下的所有订单详情状态
-                    OrderItem.setStatus(2);
-                    orderItemService.updateById(OrderItem);
+                    orderItemService.update(orderId, OrderItem.getProductId(), 1);
                 }
 
+
             }
-            order.setStatus(status+1);
+        order.setStatus(status+1);
+
+            if (status == 7) { // 退款
+                order.setStatus(7);
+                order.setRefundTime(DateTool.getCurrTime());
+            }
+
         this.updateById(order);
         return order;
     }
 
     @Override
-    public Order refund(Integer orderId, String reason) {
+    public Order refund(Integer orderId) {
         QueryWrapper<Order> queryWrapper = new QueryWrapper<>();
 
         queryWrapper.eq("id", orderId);
 
         Order order = this.getOne(queryWrapper);
-        order.setStatus(5);//退款
-        order.setCancelTime(new Date());
-        order.setCancelReason(reason);
+        order.setStatus(7);
+
+        this.updateById(order);
+        return order;
+    }
+
+    @Override
+    public Order updateStatus(Integer orderId) {
+        Order order = this.getById(orderId);
+        order.setRefundTime(DateTool.getCurrTime());
         this.updateById(order);
         return order;
     }
@@ -172,7 +187,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
             Date date = DateUtil.parse(order.getCreateTime());
 //            new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date)
             //自动取消时间5分钟
-            order.setCancelTime(DateUtil.offset(date, DateField.MINUTE, 1));
+            order.setCancelTime(DateUtil.offset(date, DateField.MINUTE, 2));
             this.pushOrder(order);
             this.cancelOrder();
         }
@@ -191,18 +206,11 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
                     try {
                         Order order = queue.take();
                         this.cancel(order.getId(), "超时自动取消");
-                        List<OrderItem> list = orderItemService.getByOrderId(order.getId());
-                        for (OrderItem OrderItem: list) {//更新该订单下的所有订单详情状态
-                            OrderItem.setStatus(5);
-                            orderItemService.updateById(OrderItem);
-                        }
+                        // 修改为之前的状态,库存,订单状态
+//                        this.modify(order.getId());
 //                        queue.remove(order);
                         System.out.println("订单：" + order.getNo() + "付款超时，自动取消，当前时间：" + DateTool.getCurrTime());
-                        // 将库存加回去
-                        StringJoiner joiner = new StringJoiner(",");
-                        for (OrderItem orderItem: list)
-                            joiner.add(String.valueOf(orderItem.getProductId()));
-                        productService.modifyStockByIds(joiner.toString(), 1);
+
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -213,6 +221,30 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         });
     }
 
+    @Override
+    public void modify(Integer orderId) {
+        List<OrderItem> list = orderItemService.getByOrderId(orderId);
+        // 将库存加回去
+        StringJoiner joinerIds = new StringJoiner(",");
+        StringJoiner joinerIsPets = new StringJoiner(",");
+        StringJoiner joinerCounts = new StringJoiner(",");
+        for (OrderItem orderItem: list) {
+            //更新该订单下的所有订单详情状态
+            orderItem.setStatus(5);
+            orderItemService.updateById(orderItem);
+
+            joinerIds.add(String.valueOf(orderItem.getProductId()));
+            // count转为负数加回去
+            joinerCounts.add(String.valueOf(-orderItem.getCount()));
+
+            // isPet为Boolean类型，转为0/1放入字符串
+            if (orderItem.getIsPet())
+                joinerIsPets.add("1");
+            else
+                joinerIsPets.add("0");
+        }
+        productService.modifyStockByIds(joinerIds.toString(), joinerIsPets.toString(), joinerCounts.toString());
+    }
 
     // 取消订单
     @Override
@@ -228,6 +260,13 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
             order.setCancelTime(new Date());
             order.setCancelReason(reason);
             this.updateById(order);
+
+            // 若手动取消订单，从超时队列里删除
+            for (Order q:queue)
+                if (q.getId().equals(orderId))
+                    queue.remove(q);
+            // 库存加回去
+            this.modify(orderId);
         }
         return order;
     }

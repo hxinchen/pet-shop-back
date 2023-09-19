@@ -65,11 +65,25 @@ public class ProductController {
         return result;
     }
 
-    // 根据ids查询产品，或者宠物
-    @GetMapping("/getByIds")
-    public Result getByIds(String ids, String isPet) {
+    // 根据产品ids查询产品
+    @GetMapping("/getByProIds")
+    public Result getByIds(String ids) {
         Result result = new Result();
-        List<Object> list = productService.getByIds(ids, isPet);
+        List<Product> list = productService.getByProIds(ids);
+        if (list == null) {
+            result.fail("查询产品失败");
+            return result;
+        }
+        result.setData(list);
+        result.success("查询产品成功");
+        return result;
+    }
+
+    // 根据ids查询产品，或者宠物
+    @GetMapping("/getProOrPetByIds")
+    public Result getProOrPetByIds(String ids, String isPet) {
+        Result result = new Result();
+        List<Object> list = productService.getProOrPetByIds(ids, isPet);
         if (list == null) {
             result.fail("查询产品失败");
             return result;
@@ -115,11 +129,11 @@ public class ProductController {
         return result;
     }
 
-    // 根据ids修改库存
+    // 根据ids修改库存, 是否宠物
     @PostMapping("/modifyStockByIds")
-    public Result modifyStockByIds(String ids, int stock) {
+    public Result modifyStockByIds(String ids, String isPets, String counts) {
         Result result = new Result();
-        if (productService.modifyStockByIds(ids, stock)) {
+        if (productService.modifyStockByIds(ids, isPets, counts)) {
             result.success("修改产品库存成功");
         } else {
             result.fail("修改产品库存失败");

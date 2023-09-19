@@ -8,6 +8,7 @@ import com.example.petshopback.service.OrderService;
 import com.example.petshopback.service.UserAddressService;
 import com.example.petshopback.service.UserService;
 import com.example.petshopback.utils.Result;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,7 +35,8 @@ public class OrderController {
 
     @Autowired
     private UserService userService;
-
+    @Autowired
+    private UserAddressService userAddressService;
     @Autowired
     private OrderItemService orderItemService;
 
@@ -54,11 +56,11 @@ public class OrderController {
     @GetMapping( "/getAll")
     public Result getAll(Integer pageNum, Integer pageSize) {
         Result result = new Result();
-        //通过id查找
+
         Page<Order> orderPage = orderService.getAll(pageNum, pageSize);
         for (Order order:orderPage.getRecords()) {
             order.put("username", userService.getById(order.getUserId()).getUsername());
-//            order.put("address", userAddressService.getById(order.getUserId()).getAddress());
+            order.put("address", userAddressService.getByUserId(order.getUserId()));
         }
         result.setData(orderPage);
         result.success("查询成功");
@@ -99,16 +101,23 @@ public class OrderController {
         return result;
     }
 
+    // 更新订单表状态
+    @PostMapping("/update")
+    public Result updateStatus(Integer orderId) {
+        Result result = new Result();
+        Order order = orderService.updateStatus(orderId);
+
+        result.setData(order);
+        result.success("更新成功");
+        return result;
+    }
+
     // 退款
     @PostMapping("/refund")
-    public Result refund(Integer orderId, String reason){
+    public Result refund(Integer orderId){
         Result result = new Result();
-        Order order = orderService.refund(orderId, reason);
-        List<OrderItem> list = orderItemService.getByOrderId(orderId);
-        for (OrderItem orderItem: list) {//退款该订单下的所有订单详情
-            orderItem.setStatus(7);
-            orderItemService.updateById(orderItem);
-        }
+        Order order = orderService.refund(orderId);
+
         result.setData(order);
         result.success("退款成功");
         return result;
@@ -123,7 +132,10 @@ public class OrderController {
         for (OrderItem orderItem: list) { //取消该订单下的所有订单详情
             orderItem.setStatus(6);
             orderItemService.updateById(orderItem);
+
         }
+
+        result.setData(order);
         result.success("取消成功");
         return result;
     }

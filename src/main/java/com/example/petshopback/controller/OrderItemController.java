@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.petshopback.entity.Order;
 import com.example.petshopback.entity.OrderItem;
 import com.example.petshopback.service.*;
+import com.example.petshopback.utils.DateTool;
 import com.example.petshopback.utils.JwtUtil;
 import com.example.petshopback.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,11 +48,7 @@ public class OrderItemController {
         Result result = new Result();
 
         List<OrderItem> list = orderItemService.add(orderId, status, ids, nums, isPet, shopIds);
-        // 将宠物表状态置为已售出
-        if (isPet == 1) {
-            String[] array = ids.split(",");
-            petService.updateUseful(Integer.parseInt(array[0]), false);
-        }
+
         System.out.println(list);
         result.setData(list);
         result.success("添加成功");
@@ -82,37 +79,61 @@ public class OrderItemController {
     @PostMapping("/update")
     public Result update(Integer orderId, Integer proId, Integer status) {
         Result result = new Result();
-        result.setData(orderItemService.update(orderId, proId, status));
-        // 判断若该订单id全部详情都更新，则更新订单状态
+        OrderItem orderItem = new OrderItem();
 
-        List<OrderItem> list = orderItemService.getByOrderIdStatus(orderId, status+1);
-        if (list.size() == 0) {
+
+        if (status == 1) { //继续付款
             // 更新订单表状态
             orderService.updateOrder(orderId, status);
         }
+        else {
+            orderItem = orderItemService.update(orderId, proId, status);
+            // 判断若该订单id全部详情都更新，则更新订单状态
+            Boolean flag = orderItemService.checkStatus(orderId, status+1);
+            if (flag) {
+                // 更新订单表状态
+                orderService.updateOrder(orderId, status);
+            }
+        }
         result.success("更新成功");
+        result.setData(orderItem);
         return result;
     }
 
     // 申请退款
     @PostMapping("/applyRefund")
-    public Result refund(Integer orderId, Integer status, Integer proId, Boolean isPet, String reason) {
+    public Result refund(Integer orderId, Integer proId, Boolean isPet, String reason) {
         Result result = new Result();
-        orderItemService.applyRefund(orderId, status, proId, isPet, reason);
+        orderItemService.applyRefund(orderId, proId, isPet, reason);
+
+        // 更新订单表状态
+        Order order = orderService.getById(orderId);
+        order.setRefundTime(DateTool.getCurrTime());
+        orderService.updateById(order);
 
         result.success("申请退款成功");
         return result;
     }
 
     // 审核退款
-@PostMapping("/checkRefund")
-public Result checkRefund(Integer orderId, Integer status, Integer proId, Integer isPet, String reason) {
-        // 退款成功
-        Result result = new Result();
-//        orderItemService.checkRefund(orderId, status, proId, isPet, reason);
-    return result;
-}
+    @PostMapping("/checkRefund")
+    public Result checkRefund(Integer orderId, Integer refundStatus, Integer proId, Integer isPet) {
 
+        Result result = new Result();
+        OrderItem orderItem = orderItemService.checkRefund(orderId, refundStatus, proId, isPet);
+        // 判断审核是否通过
+        if (refundStatus == 1) { // 1--通过
+            // 判断若该订单id全部详情都更新，则更新订单状态
+            Boolean flag = orderItemService.checkStatus(orderId, 7);
+            if (flag) {
+                // 更新订单表状态
+                orderService.updateOrder(orderId, 7);
+            }
+        }
+        result.success("审核退款");
+        result.setData(orderItem);
+        return result;
+    }
 
     @GetMapping( "/getByOrderId")
     public Result getByOrderId(Integer orderId) {
@@ -162,5 +183,4 @@ public Result checkRefund(Integer orderId, Integer status, Integer proId, Intege
         }
         return result;
     }
-
 }

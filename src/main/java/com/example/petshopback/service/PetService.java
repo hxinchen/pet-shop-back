@@ -23,5 +23,5 @@ public interface PetService extends IService<Pet> {
 
     boolean deleteByIds(String ids);
 
-    void updateUseful(Integer petId, Boolean useful);
+    void updateUseful(Integer petId);
 }

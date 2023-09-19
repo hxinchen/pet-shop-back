@@ -34,6 +34,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
 //        ret.add("/user/register");
 //        ret.add("/user/validate");
         ret.add("/user/*");
+        ret.add("/order/getAll");
         ret.add("/shop/*");
         ret.add("/search/*");
         ret.add("/pet/getById");

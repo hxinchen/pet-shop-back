@@ -34,8 +34,6 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     private ProductCategoryService productCategoryService;
     @Autowired
     private ShopService shopService;
-    @Autowired
-    private  UserAddressService userAddressService;
 
 
     @Override
@@ -112,21 +110,35 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     }
 
     @Override
-    public boolean modifyStockByIds(String ids, Integer stock) {
+    public boolean modifyStockByIds(String ids, String isPets, String counts) {
         String[] array = ids.split(",");
-        for (String id : array) {
-            Integer productId = Integer.valueOf(id);
-            Product product = this.getById(productId);
-            if (product != null) {
-                product.setStock(product.getStock() + stock);
-                this.updateById(product);
+        String[] arrayIsPet = isPets.split(",");
+        String[] arrayCount = counts.split(",");
+        // 根据是否是宠物周边，宠物则修改useful,否则修改stock
+        for (Integer i = 0; i < array.length; i++) {
+            if (arrayIsPet[i].equals("1")) {
+                petService.updateUseful(Integer.valueOf(array[i]));
+            } else if (arrayIsPet[i].equals("0")){
+                Product product = this.getById(Integer.valueOf(array[i]));
+                if (product != null) {
+                    product.setStock(product.getStock() - Integer.valueOf(arrayCount[i]));
+                    this.updateById(product);
+                }
             }
         }
+//        for (String id : array) {
+//            Integer productId = Integer.valueOf(id);
+//            Product product = this.getById(productId);
+//            if (product != null) {
+//                product.setStock(product.getStock() + stock);
+//                this.updateById(product);
+//            }
+//        }
         return true;
     }
 
     @Override
-    public List<Object> getByIds(String ids, String isPet) {
+    public List<Object> getProOrPetByIds(String ids, String isPet) {
         List<Object> list = new ArrayList<>();
 
         String[] array = ids.split(",");
@@ -162,6 +174,18 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 //                }
 //            }
 //            list.add(this.getById(Integer.valueOf(i)));
+        }
+        return list;
+    }
+
+    @Override
+    public List<Product> getByProIds(String ids) {
+        List<Product> list = new ArrayList<>();
+        String[] array = ids.split(",");
+        for (String i:array) {
+            QueryWrapper<Product> queryWrapper = new QueryWrapper<>();
+            queryWrapper.select("id", "name", "price", "img").eq("id", Integer.valueOf(i));
+            list.add(this.getOne(queryWrapper));
         }
         return list;
     }
