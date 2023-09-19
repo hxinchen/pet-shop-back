@@ -76,9 +76,9 @@ public class PetController {
 
     // 更新useful
     @PostMapping("/updateUseful")
-    public Result updateUseful(Integer petId, Boolean useful) {
+    public Result updateUseful(Integer petId) {
         Result result = new Result();
-        petService.updateUseful(petId, useful);
+        petService.updateUseful(petId);
         result.success("更新useful成功");
         return result;
     }

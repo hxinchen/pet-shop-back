@@ -23,6 +23,8 @@ public interface OrderService extends IService<Order> {
     DelayQueue<Order> pushOrder(Order order);
     Order add(Double sumPrice, Integer isPay, Integer addressId) throws ParseException;
 
+    void modify(Integer orderId);
+
     Order cancel(Integer orderId, String reason);
 
     Page<Order> getAll(Integer pageNum, Integer pageSize);
@@ -33,5 +35,7 @@ public interface OrderService extends IService<Order> {
 
     void deleteByIds(String ids);
     Order updateOrder(Integer orderId, Integer status);
-    Order refund(Integer orderId, String reason);
+    Order refund(Integer orderId);
+
+    Order updateStatus(Integer orderId);
 }

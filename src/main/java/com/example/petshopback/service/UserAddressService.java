@@ -21,6 +21,6 @@ public interface UserAddressService extends IService<UserAddress> {
 //    置默认为非默认
     Boolean setNotDefault();
     UserAddress getById(Integer addressId);
-
+    UserAddress getByUserId(Integer userId);
     UserAddress getDefault();
 }
