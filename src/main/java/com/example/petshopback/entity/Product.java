@@ -63,4 +63,10 @@ public class Product extends BaseEntity implements Serializable {
      */
     @ApiModelProperty(value = "产品库存")
     private Integer stock;
+
+    /**
+     * 访问次数
+     */
+    @ApiModelProperty(value = "访问次数")
+    private Integer accessCount;
 }

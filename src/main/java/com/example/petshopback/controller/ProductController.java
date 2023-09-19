@@ -1,6 +1,7 @@
 package com.example.petshopback.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.petshopback.entity.Pet;
 import com.example.petshopback.entity.Product;
 import com.example.petshopback.service.FavorService;
 import com.example.petshopback.service.ProductCategoryService;
@@ -112,7 +113,6 @@ public class ProductController {
     public Result getByCategory(Integer pageNum, Integer pageSize, Integer category) {
         Result result = new Result();
         Page<Product> page = productService.getByCategory(pageNum, pageSize, category);
-
         return getProduct(result, page);
     }
 
@@ -174,5 +174,28 @@ public class ProductController {
         return result;
     }
 
-
+    //检查商品库存
+    @GetMapping("/checkStock")
+    public Result checkStock(Integer productId) {
+        Result result = new Result();
+        if (productService.checkStock(productId)) {
+            result.success("库存充足");
+        } else {
+            result.fail("库存不足");
+        }
+        return result;
+    }
+    // 增加访问量
+    @PostMapping("/addVisit")
+    public Result addVisit(Integer productId) {
+        Result result = new Result();
+        Product product = productService.getById(productId);
+        product.setAccessCount(product.getAccessCount() + 1);
+        if (productService.updateById(product)) {
+            result.success("增加访问量成功");
+        } else {
+            result.fail("增加访问量失败");
+        }
+        return result;
+    }
 }

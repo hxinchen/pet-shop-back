@@ -92,4 +92,19 @@ public class ShopController {
         }
         return result;
     }
+
+    // 根据id查询商店
+    @GetMapping("/getById")
+    public Result getById(int id) {
+        Result result = new Result();
+        Shop shop = shopService.getById(id);
+        if (shop != null) {
+            result.success("查询成功");
+            result.setData(shop);
+        }
+        else {
+            result.fail("查询失败");
+        }
+        return result;
+    }
 }

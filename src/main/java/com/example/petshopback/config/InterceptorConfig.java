@@ -43,13 +43,12 @@ public class InterceptorConfig implements WebMvcConfigurer {
         ret.add("/review/get");
         ret.add("/petCategory/**");
         ret.add("/productCategory/*");
-        ret.add("/swagger-resources/**");
+//        ret.add("/swagger-resources/**");
         ret.add("/**");
 //        , \"/webjars/**\", \"/v2/**\", \"/swagger-ui.html/**"
 //        ret.add("/favor/*");
         return ret;
     }
-
     /**
      * 资源映射到本地路径
      * @param registry
