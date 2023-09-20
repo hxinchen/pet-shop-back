@@ -33,20 +33,19 @@ public class InterceptorConfig implements WebMvcConfigurer {
 //        ret.add("/user/login");
 //        ret.add("/user/register");
 //        ret.add("/user/validate");
-        ret.add("/user/*");
+        ret.add("/user/**");
         ret.add("/order/getAll");
-        ret.add("/shop/*");
-        ret.add("/search/*");
+        ret.add("/shop/**");
+        ret.add("/search/**");
         ret.add("/pet/getById");
         ret.add("/pet/getByCategory");
-        ret.add("/product/*");
-        ret.add("/review/get");
+        ret.add("/product/**");
         ret.add("/petCategory/**");
-        ret.add("/productCategory/*");
+        ret.add("/productCategory/**");
+        ret.add("/review/**");
 //        ret.add("/swagger-resources/**");
-        ret.add("/**");
+//        ret.add("/**");
 //        , \"/webjars/**\", \"/v2/**\", \"/swagger-ui.html/**"
-//        ret.add("/favor/*");
         return ret;
     }
     /**

@@ -84,6 +84,8 @@ public class ReviewServiceImpl extends ServiceImpl<ReviewMapper, Review> impleme
                 }else {
                     String productName= productService.getById(pId).getName();
                     review.put("productName",productName);
+                    review.put("productId",pId);
+
                 }
                 int count= orderItemService.getById(review.getOrderItemId()).getCount();
                 review.put("count",count);

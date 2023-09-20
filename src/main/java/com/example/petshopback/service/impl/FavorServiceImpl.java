@@ -44,7 +44,10 @@ public class FavorServiceImpl extends ServiceImpl<FavorMapper, Favor> implements
     @Override
     public int findByfavorId(int favorId, Boolean isPet) {
         String token= request.getHeader("token");
-        int userId=Integer.parseInt(JwtUtil.validateToken(token));
+        if(token==""){
+            return 0;
+        }
+        Integer userId=Integer.parseInt(JwtUtil.validateToken(token));
         QueryWrapper<Favor> queryWrapper=new QueryWrapper<>();
         queryWrapper.eq("user_id",userId);
         queryWrapper.eq("is_pet",isPet);

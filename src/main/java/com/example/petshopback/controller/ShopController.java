@@ -5,13 +5,17 @@ import com.example.petshopback.entity.ProductCategory;
 import com.example.petshopback.entity.Shop;
 import com.example.petshopback.service.ShopService;
 import com.example.petshopback.service.UserService;
+import com.example.petshopback.utils.JwtUtil;
 import com.example.petshopback.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 import com.example.petshopback.utils.Transform;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * <p>
@@ -28,7 +32,8 @@ public class ShopController {
     private UserService userService;
     @Autowired
     private ShopService shopService;
-
+    @Autowired
+    private HttpServletRequest request;
     // 新增商店
     @PostMapping("/add")
     public Result add(@RequestBody Shop shop) {
@@ -61,12 +66,21 @@ public class ShopController {
     @GetMapping("/getAll")
     public Result getAll(Integer pageNum, Integer pageSize) {
         Result result = new Result();
+        String token = request.getHeader("token");
+        Integer userId = Integer.parseInt(JwtUtil.validateToken(token));
         Page<Shop> page = shopService.getAllShop(pageNum, pageSize);
+        List<Shop> list = new ArrayList<>();
         if (page.getRecords() != null) {
             result.success("查询成功");
             for (int i=0; i < page.getRecords().size(); i++) {
                 page.getRecords().get(i).put("userName",userService.getById(page.getRecords().get(i).getUserId()).getUsername());
+                if(Objects.equals(page.getRecords().get(i).getUserId(), userId)) {
+                    //排除其他用户的商店
+                    list.add(page.getRecords().get(i));
+                }
             }
+            //把list的结果放到page里面
+            page.setRecords(list);
             result.setData(page);
         }
         else {
