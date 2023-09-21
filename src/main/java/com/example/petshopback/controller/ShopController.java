@@ -42,6 +42,19 @@ public class ShopController {
         return result;
     }
 
+    // 编辑商店
+    @PostMapping("/modify")
+    public Result modify(@RequestBody Shop shop) {
+        Result result = new Result();
+        if (shopService.updateById(shop)) {
+            result.setData(shop);
+            result.success("编辑商店成功");
+        } else {
+            result.fail("编辑商店失败");
+        }
+        return result;
+    }
+
     @GetMapping("/getList")
     public Result getList() {
         Result result = new Result();
