@@ -8,6 +8,7 @@ import com.example.petshopback.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.petshopback.utils.DateTool;
 import com.example.petshopback.utils.JwtUtil;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +27,7 @@ import java.util.*;
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
+    @Cacheable(value = "myData", key = "#user.id")
     @Override
     public Map<String, Object> register(User user) {
         // 设置默认头像
@@ -76,6 +78,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    public Boolean updateAvatar(Integer userId, String avatar) {
+        User user = this.getById(userId);
+        user.setAvatar(avatar);
+        this.updateById(user);
+        return true;
+    }
+
+    @Override
     public User updateUser(User user) {
 //        String token = request.getHeader("Authorization");
 ////        System.out.println("token" + token);
@@ -110,4 +120,5 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 //        map.put("user", loginUser);
         return null;
     }
+
 }

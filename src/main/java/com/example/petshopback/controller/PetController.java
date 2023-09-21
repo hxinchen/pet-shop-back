@@ -140,4 +140,17 @@ public class PetController {
         return result;
     }
 
+    // 增加访问量
+    @PostMapping("/addVisit")
+    public Result addVisit(Integer id) {
+        Result result = new Result();
+        Pet pet = petService.getById(id);
+        pet.setAccessCount(pet.getAccessCount() + 1);
+        if (petService.updateById(pet)) {
+            result.success("增加访问量成功");
+        } else {
+            result.fail("增加访问量失败");
+        }
+        return result;
+    }
 }

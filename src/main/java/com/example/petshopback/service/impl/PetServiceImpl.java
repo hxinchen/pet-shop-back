@@ -74,24 +74,21 @@ public class PetServiceImpl extends ServiceImpl<PetMapper, Pet> implements PetSe
     // 根据宠物类别查询宠物
     @Override
     public Page<Pet> getByCategory(Integer pageNum, Integer pageSize, Integer category) {
-//        Page<Pet> page = new Page<>(pageNum, pageSize);
+        Page<Pet> page = new Page<>(pageNum, pageSize);
         QueryWrapper<Pet> queryWrapper = new QueryWrapper<>();
-        Transform transform = new Transform(); //list转page
-        List<Pet> petList = new ArrayList<>();
-        // 添加查询条件，查询useful为1的记录
+//         queryWrapper.eq("category_id", category).eq("useful", 1);
+//         petList = this.list(queryWrapper);
+//         return transform.listToPage(petList, pageNum, pageSize);
+        
+        //按访问量降序排列
+        queryWrapper.orderByDesc("access_count");
+      
+        queryWrapper.eq("useful", 1);
         if (category == 0) { //全部
-            queryWrapper.eq("useful", 1);
-            petList = this.list(queryWrapper);
-            return transform.listToPage(petList, pageNum, pageSize);
+            return this.page(page, queryWrapper);
         }
-        queryWrapper.eq("category_id", category).eq("useful", 1);
-        petList = this.list(queryWrapper);
-        return transform.listToPage(petList, pageNum, pageSize);
-
-//        if (category == 0)
-//            return this.page(page, queryWrapper);
-//        queryWrapper.eq("category_id", category);
-//        return this.page(page, queryWrapper);
+        queryWrapper.eq("category_id", category);
+        return this.page(page, queryWrapper);
     }
 
     @Override
@@ -126,6 +123,13 @@ public class PetServiceImpl extends ServiceImpl<PetMapper, Pet> implements PetSe
     public void updateUseful(Integer petId) {
         Pet pet = getById(petId);
         pet.setUseful(!pet.getUseful());
+        updateById(pet);
+    }
+
+    @Override
+    public void addAccessCount(Integer id) {
+        Pet pet = getById(id);
+        pet.setAccessCount(pet.getAccessCount() + 1);
         updateById(pet);
     }
 }
