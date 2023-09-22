@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -79,10 +80,10 @@ public class OrderItemServiceImpl extends ServiceImpl<OrderItemMapper, OrderItem
     }
 
     @Override
-    public OrderItem update(Integer orderId, Integer proId, Integer status) {
+    public OrderItem update(Integer orderId, Integer productId, Integer status) {
 
         QueryWrapper<OrderItem> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("order_id", orderId).eq("product_id", proId);
+        queryWrapper.eq("order_id", orderId).eq("product_id", productId);
         OrderItem orderItem = this.getOne(queryWrapper);
         orderItem.setStatus(status+1);
         this.updateById(orderItem);
@@ -116,19 +117,19 @@ public class OrderItemServiceImpl extends ServiceImpl<OrderItemMapper, OrderItem
             else
                 orderItem.setIsPet(false);
 
-//            if (isPet == 1) {
-//                orderItem.setIsPet(true);
-//                // 将宠物表状态置为已售出
-//                petService.updateUseful(Integer.valueOf(arrayId[i]));
-//            }
-//            else {
-//                orderItem.setIsPet(false);
-                // 库存减少
-//                productService.modifyStockByIds(ids, isPets, nums);
-//                Product product = productService.getById(Integer.valueOf(arrayId[i]));
-//                product.setStock(product.getStock() - Integer.valueOf(arrayNum[i]));
-//                productService.updateById(product);
-//            }
+            if (isPet == 1) {
+                orderItem.setIsPet(true);
+                // 将宠物表状态置为已售出
+                petService.updateUseful(Integer.valueOf(arrayId[i]));
+            }
+            else {
+                orderItem.setIsPet(false);
+//                 库存减少
+                productService.modifyStockByIds(ids, isPet, nums);
+                Product product = productService.getById(Integer.valueOf(arrayId[i]));
+                product.setStock(product.getStock() - Integer.valueOf(arrayNum[i]));
+                productService.updateById(product);
+            }
             this.save(orderItem);
             orderItems.add(orderItem);
         }

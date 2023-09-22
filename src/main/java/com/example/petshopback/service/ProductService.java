@@ -23,13 +23,15 @@ public interface ProductService extends IService<Product> {
 
     Page<Product> getByCategory(Integer pageNum, Integer pageSize, Integer category);
 
+    Page<Product> getByShop(Integer pageNum, Integer pageSize, Integer category);
+
     boolean deleteByIds(String ids);
 
     List<Integer> getShopIds(String ids);
 
     Product getByIdStock(Integer id);
 
-    boolean modifyStockByIds(String ids, String isPets, String counts);
+    boolean modifyStockByIds(String ids, Integer isPet, String counts);
 
 
     List<Object> getProOrPetByIds(String ids, String isPet);

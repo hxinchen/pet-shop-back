@@ -13,6 +13,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.petshopback.service.ProductService;
 import com.example.petshopback.utils.DateTool;
 import com.example.petshopback.utils.JwtUtil;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
@@ -227,8 +228,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         List<OrderItem> list = orderItemService.getByOrderId(orderId);
         // 将库存加回去
         StringJoiner joinerIds = new StringJoiner(",");
-        StringJoiner joinerIsPets = new StringJoiner(",");
+//        StringJoiner joinerIsPets = new StringJoiner(",");
         StringJoiner joinerCounts = new StringJoiner(",");
+        Integer isPet = 0;
         for (OrderItem orderItem: list) {
             //更新该订单下的所有订单详情状态
             orderItem.setStatus(5);
@@ -239,12 +241,13 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
             joinerCounts.add(String.valueOf(-orderItem.getCount()));
 
             // isPet为Boolean类型，转为0/1放入字符串
+            
             if (orderItem.getIsPet())
-                joinerIsPets.add("1");
+                isPet = 1;
             else
-                joinerIsPets.add("0");
+                isPet = 0;
         }
-        productService.modifyStockByIds(joinerIds.toString(), joinerIsPets.toString(), joinerCounts.toString());
+        productService.modifyStockByIds(joinerIds.toString(), isPet, joinerCounts.toString());
     }
 
     // 取消订单

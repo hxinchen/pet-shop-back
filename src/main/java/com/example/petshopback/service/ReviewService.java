@@ -1,5 +1,6 @@
 package com.example.petshopback.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.petshopback.entity.Review;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -22,4 +23,6 @@ public interface ReviewService extends IService<Review> {
     void like(int id);
 
     List<Review> getByShopId(int shopId,int productId);
+
+    Page<Review> getAll(int pageNum, int pageSize);
 }

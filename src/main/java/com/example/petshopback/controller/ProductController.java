@@ -116,6 +116,15 @@ public class ProductController {
         return getProduct(result, page);
     }
 
+    // 按商店查询产品
+    @GetMapping("/getByShop")
+    public Result getByShop(Integer pageNum, Integer pageSize, Integer category) {
+        Result result = new Result();
+        Page<Product> page = productService.getByShop(pageNum, pageSize, category);
+
+        return getProduct(result, page);
+    }
+
     // 修改周边产品信息
     @PostMapping("/modify")
     public Result modify(@RequestBody Product product) {
@@ -131,9 +140,9 @@ public class ProductController {
 
     // 根据ids修改库存, 是否宠物
     @PostMapping("/modifyStockByIds")
-    public Result modifyStockByIds(String ids, String isPets, String counts) {
+    public Result modifyStockByIds(String ids, Integer isPet, String counts) {
         Result result = new Result();
-        if (productService.modifyStockByIds(ids, isPets, counts)) {
+        if (productService.modifyStockByIds(ids, isPet, counts)) {
             result.success("修改产品库存成功");
         } else {
             result.fail("修改产品库存失败");
