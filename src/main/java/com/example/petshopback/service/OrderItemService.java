@@ -20,7 +20,7 @@ public interface OrderItemService extends IService<OrderItem> {
 
     List<OrderItem> getByOrderId(Integer orderId);
     Boolean checkStatus(Integer orderId, Integer status);
-    OrderItem update(Integer orderId, Integer proId, Integer status);
+    OrderItem update(Integer orderId, Integer productId, Integer status);
     List<OrderItem> add(Integer orderId, Integer status, String ids, String nums, Integer isPet, String shopIds);
 
     void applyRefund(Integer orderId, Integer proId, Boolean isPet, String reason);

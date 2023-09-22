@@ -107,15 +107,15 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     }
 
     @Override
-    public boolean modifyStockByIds(String ids, String isPets, String counts) {
+    public boolean modifyStockByIds(String ids, Integer isPet, String counts) {
         String[] array = ids.split(",");
-        String[] arrayIsPet = isPets.split(",");
+//        String[] arrayIsPet = isPets.split(",");
         String[] arrayCount = counts.split(",");
         // 根据是否是宠物周边，宠物则修改useful,否则修改stock
         for (Integer i = 0; i < array.length; i++) {
-            if (arrayIsPet[i].equals("1")) {
+            if (isPet == 1) {
                 petService.updateUseful(Integer.valueOf(array[i]));
-            } else if (arrayIsPet[i].equals("0")){
+            } else if (isPet == 0){
                 Product product = this.getById(Integer.valueOf(array[i]));
                 if (product != null) {
                     product.setStock(product.getStock() - Integer.valueOf(arrayCount[i]));

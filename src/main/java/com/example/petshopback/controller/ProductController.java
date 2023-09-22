@@ -131,9 +131,9 @@ public class ProductController {
 
     // 根据ids修改库存, 是否宠物
     @PostMapping("/modifyStockByIds")
-    public Result modifyStockByIds(String ids, String isPets, String counts) {
+    public Result modifyStockByIds(String ids, Integer isPet, String counts) {
         Result result = new Result();
-        if (productService.modifyStockByIds(ids, isPets, counts)) {
+        if (productService.modifyStockByIds(ids, isPet, counts)) {
             result.success("修改产品库存成功");
         } else {
             result.fail("修改产品库存失败");
