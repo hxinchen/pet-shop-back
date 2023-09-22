@@ -1,6 +1,7 @@
 package com.example.petshopback.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.petshopback.entity.Review;
 import com.example.petshopback.mapper.ReviewMapper;
 import com.example.petshopback.service.*;
@@ -94,5 +95,29 @@ public class ReviewServiceImpl extends ServiceImpl<ReviewMapper, Review> impleme
             }
         }
         return newReviews;
+    }
+
+    @Override
+    public Page<Review> getAll(int pageNum, int pageSize) {
+        Page<Review> page = new Page<>(pageNum, pageSize);
+        QueryWrapper<Review> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByDesc("create_time");
+        Page<Review> reviewPage = this.page(page, queryWrapper);
+        for (Review review : reviewPage.getRecords()) {
+            String username = userService.getById(review.getUserId()).getUsername();
+            String avatar = userService.getById(review.getUserId()).getAvatar();
+            review.put("username",username);
+            review.put("avatar",avatar);
+            if(orderItemService.getById(review.getOrderItemId()).getIsPet()){
+                String petName= petService.getById(orderItemService.getById(review.getOrderItemId()).getProductId()).getName();
+                review.put("petName",petName);
+            }else {
+                String productName= productService.getById(orderItemService.getById(review.getOrderItemId()).getProductId()).getName();
+                review.put("productName",productName);
+            }
+            int count= orderItemService.getById(review.getOrderItemId()).getCount();
+            review.put("count",count);
+        }
+        return reviewPage;
     }
 }

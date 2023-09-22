@@ -31,7 +31,7 @@ public interface ProductService extends IService<Product> {
 
     Product getByIdStock(Integer id);
 
-    boolean modifyStockByIds(String ids, String isPets, String counts);
+    boolean modifyStockByIds(String ids, Integer isPet, String counts);
 
 
     List<Object> getProOrPetByIds(String ids, String isPet);

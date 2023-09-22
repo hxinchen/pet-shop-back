@@ -77,7 +77,7 @@ public class OrderItemController {
 
     //更新订单详情状态
     @PostMapping("/update")
-    public Result update(Integer orderId, Integer proId, Integer status) {
+    public Result update(Integer orderId, Integer productId, Integer status) {
         Result result = new Result();
         OrderItem orderItem = new OrderItem();
 
@@ -87,7 +87,7 @@ public class OrderItemController {
             orderService.updateOrder(orderId, status);
         }
         else {
-            orderItem = orderItemService.update(orderId, proId, status);
+            orderItem = orderItemService.update(orderId, productId, status);
             // 判断若该订单id全部详情都更新，则更新订单状态
             Boolean flag = orderItemService.checkStatus(orderId, status+1);
             if (flag) {

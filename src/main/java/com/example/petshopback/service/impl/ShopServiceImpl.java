@@ -38,7 +38,20 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements Sh
             System.out.println("商店已存在，新增商店失败");
             return false;
         }
-        save(shop);
+        Shop newShop = new Shop();
+
+        // 根据area和detailAddress获取经纬度
+//        String address = shop.getArea() + shop.getDetailAddress();
+        newShop.setArea(shop.getArea());
+        newShop.setDetailAddress(shop.getDetailAddress());
+        newShop.setName(shop.getName());
+        newShop.setLatitude(shop.getLatitude());
+        newShop.setLongitude(shop.getLongitude());
+        // 解析token
+        String token = request.getHeader("token");
+        String userId = JwtUtil.validateToken(token);
+        newShop.setUserId(Integer.valueOf(userId));
+        save(newShop);
         return true;
     }
 

@@ -59,6 +59,17 @@ public class ReviewController {
 
         return result;
     }
+
+    //获取评论分页
+    @GetMapping("/getAll")
+    public Result getAll(int pageNum,int pageSize){
+        Result result =new Result();
+        result.setData(reviewService.getAll(pageNum,pageSize));
+
+        return result;
+    }
+
+
     //评论点赞
 //    @PostMapping("/like")
 //    public Result like(int id){
