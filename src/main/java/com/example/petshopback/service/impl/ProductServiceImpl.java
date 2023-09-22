@@ -206,4 +206,11 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
             this.updateById(product);
         }
     }
+
+    @Override
+    public List<Product> getProductByShopId(Integer shopId) {
+        QueryWrapper<Product> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("shop_id", shopId);
+        return this.list(queryWrapper);
+    }
 }

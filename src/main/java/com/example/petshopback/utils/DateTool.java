@@ -60,6 +60,9 @@ public class DateTool {
 	public static Date parseTime(String time) throws ParseException {
 		return longFormat.parse(time);
 	}
+	public static Date parseShortTime(String time) throws ParseException {
+		return shortFormat.parse(time);
+	}
 	/**
 	 * 		
 	 * @描述  计算time和当前时间相差几天

@@ -132,4 +132,11 @@ public class PetServiceImpl extends ServiceImpl<PetMapper, Pet> implements PetSe
         pet.setAccessCount(pet.getAccessCount() + 1);
         updateById(pet);
     }
+
+    @Override
+    public List<Pet> getPetByShopId(Integer shopId) {
+        QueryWrapper<Pet> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("shop_id", shopId);
+        return list(queryWrapper);
+    }
 }

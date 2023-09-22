@@ -39,4 +39,6 @@ public interface ProductService extends IService<Product> {
     boolean checkStock(Integer id);
 
     void addAccessCount(Integer id);
+
+    List<Product> getProductByShopId(Integer shopId);
 }

@@ -385,6 +385,9 @@ public class RedisUtils {
     public void hPut(String key, String hashKey, Integer value) {
         redisTemplate.opsForHash().put(key, hashKey, value);
     }
+    public void hPut(String key, String hashKey, Double value) {
+        redisTemplate.opsForHash().put(key, hashKey, value);
+    }
 
     public void hPutAll(String key, Map<String, String> maps) {
         redisTemplate.opsForHash().putAll(key, maps);
@@ -431,6 +434,9 @@ public class RedisUtils {
     public boolean hExists(String key, String field) {
         return redisTemplate.opsForHash().hasKey(key, field);
     }
+    public boolean hExists(String key, Integer field) {
+        return redisTemplate.opsForHash().hasKey(key, field);
+    }
 
     /**
      * 为哈希表 key 中的指定字段的整数值加上增量 increment
@@ -467,6 +473,17 @@ public class RedisUtils {
     }
 
     /**
+     * 设置哈希表过期时间
+     * @param key
+     * @param timeout
+     * @return
+     */
+    public Boolean HExpire(String key, long timeout) {
+        return redisTemplate.expire(key, timeout, TimeUnit.SECONDS);
+    }
+
+
+    /**
      * 获取哈希表中字段的数量
      *
      * @param key
@@ -494,6 +511,7 @@ public class RedisUtils {
      * @return
      */
     public Cursor<Map.Entry<Object, Object>> hScan(String key, ScanOptions options) {
+
         return redisTemplate.opsForHash().scan(key, options);
     }
 
