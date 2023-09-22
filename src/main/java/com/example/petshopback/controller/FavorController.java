@@ -36,8 +36,12 @@ public class FavorController {
     public Result add(@RequestBody Favor favor){
         Result result = new Result();
         String token= request.getHeader("token");
-        int userId=Integer.parseInt(JwtUtil.validateToken(token));
-        int isExit = favorService.findByfavorId(favor.getFavorId(),favor.getIsPet());
+        Integer userId=Integer.parseInt(JwtUtil.validateToken(token));
+        if(userId==0){
+            result.fail("请先登录");
+            return result;
+        }
+        Integer isExit = favorService.findByfavorId(favor.getFavorId(),favor.getIsPet());
         if (isExit!=0) {
             result.fail("已收藏");
         } else {
@@ -63,7 +67,7 @@ public class FavorController {
     @GetMapping("/findByPetId")
     public Result findByPetId(Integer favorId,Boolean isPet){
         Result result=new Result();
-        int id=favorService.findByfavorId(favorId,isPet);
+        Integer id=favorService.findByfavorId(favorId,isPet);
         if(id!=0){
             result.setData(id);
             result.success("已收藏");
@@ -78,7 +82,11 @@ public class FavorController {
         Result result = new Result();
         System.out.println("进入getAll");
         String token= request.getHeader("token");
-        int userId=Integer.parseInt(JwtUtil.validateToken(token));
+        Integer userId=Integer.parseInt(JwtUtil.validateToken(token));
+        if(userId==0){
+            result.fail("请先登录");
+            return result;
+        }
         List<FavorVO> favorVOList=favorService.getAll(userId,isPet);
         result.setData(favorVOList);
         return result;

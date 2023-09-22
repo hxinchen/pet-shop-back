@@ -72,6 +72,25 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         return transform.listToPage(this.list(queryWrapper), pageNum, pageSize);
     }
 
+    @Override
+    public Page<Product> getByShop(Integer pageNum, Integer pageSize, Integer category) {
+//        Page<Product> page = new Page<>(pageNum, pageSize);
+        QueryWrapper<Product> queryWrapper = new QueryWrapper<>();
+        Transform transform = new Transform();
+        List<Product> productList = new ArrayList<>();
+        if (category == -1) {
+            // 添加查询条件，查询stock>0的记录
+            queryWrapper.gt("stock", 50);
+            productList = this.list(queryWrapper);
+            return transform.listToPage(productList, pageNum, pageSize);
+        }
+//            return this.page(page, queryWrapper);
+        queryWrapper.gt("stock", 0).eq("shop_id", category);
+//        return this.page(page, queryWrapper);
+        productList = this.list(queryWrapper);
+        return transform.listToPage(productList, pageNum, pageSize);
+    }
+
 
     @Override
     public boolean deleteByIds(String ids) {
@@ -205,5 +224,12 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
             product.setAccessCount(product.getAccessCount() + 1);
             this.updateById(product);
         }
+    }
+
+    @Override
+    public List<Product> getProductByShopId(Integer shopId) {
+        QueryWrapper<Product> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("shop_id", shopId);
+        return this.list(queryWrapper);
     }
 }

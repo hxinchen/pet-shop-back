@@ -1,5 +1,6 @@
 
 package com.example.petshopback.utils;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.DataType;
 import org.springframework.data.redis.core.Cursor;
@@ -381,6 +382,12 @@ public class RedisUtils {
     public void hPut(String key, String hashKey, String value) {
         redisTemplate.opsForHash().put(key, hashKey, value);
     }
+    public void hPut(String key, String hashKey, Integer value) {
+        redisTemplate.opsForHash().put(key, hashKey, value);
+    }
+    public void hPut(String key, String hashKey, Double value) {
+        redisTemplate.opsForHash().put(key, hashKey, value);
+    }
 
     public void hPutAll(String key, Map<String, String> maps) {
         redisTemplate.opsForHash().putAll(key, maps);
@@ -410,6 +417,14 @@ public class RedisUtils {
     }
 
     /**
+     * 删除哈希表key
+     * @param key
+     * @return
+     */
+    public Boolean hDeleteKey(String key) {
+        return redisTemplate.opsForHash().getOperations().delete(key);
+    }
+    /**
      * 查看哈希表 key 中，指定的字段是否存在
      *
      * @param key
@@ -417,6 +432,9 @@ public class RedisUtils {
      * @return
      */
     public boolean hExists(String key, String field) {
+        return redisTemplate.opsForHash().hasKey(key, field);
+    }
+    public boolean hExists(String key, Integer field) {
         return redisTemplate.opsForHash().hasKey(key, field);
     }
 
@@ -455,6 +473,17 @@ public class RedisUtils {
     }
 
     /**
+     * 设置哈希表过期时间
+     * @param key
+     * @param timeout
+     * @return
+     */
+    public Boolean HExpire(String key, long timeout) {
+        return redisTemplate.expire(key, timeout, TimeUnit.SECONDS);
+    }
+
+
+    /**
      * 获取哈希表中字段的数量
      *
      * @param key
@@ -482,6 +511,7 @@ public class RedisUtils {
      * @return
      */
     public Cursor<Map.Entry<Object, Object>> hScan(String key, ScanOptions options) {
+
         return redisTemplate.opsForHash().scan(key, options);
     }
 
@@ -1018,7 +1048,9 @@ public class RedisUtils {
     public Boolean zAdd(String key, String value, double score) {
         return redisTemplate.opsForZSet().add(key, value, score);
     }
-
+    public Boolean zAdd(String key, String value, long score) {
+        return redisTemplate.opsForZSet().add(key, value, score);
+    }
     /**
      *
      * @param key
@@ -1030,7 +1062,7 @@ public class RedisUtils {
     }
 
     /**
-     *
+     *删除指定成员
      * @param key
      * @param values
      * @return

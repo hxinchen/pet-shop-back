@@ -23,6 +23,8 @@ public interface ProductService extends IService<Product> {
 
     Page<Product> getByCategory(Integer pageNum, Integer pageSize, Integer category);
 
+    Page<Product> getByShop(Integer pageNum, Integer pageSize, Integer category);
+
     boolean deleteByIds(String ids);
 
     List<Integer> getShopIds(String ids);
@@ -39,4 +41,6 @@ public interface ProductService extends IService<Product> {
     boolean checkStock(Integer id);
 
     void addAccessCount(Integer id);
+
+    List<Product> getProductByShopId(Integer shopId);
 }

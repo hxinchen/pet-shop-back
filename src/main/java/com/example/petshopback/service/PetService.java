@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.petshopback.entity.Pet;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  * 宠物表 服务类
@@ -24,4 +26,5 @@ public interface PetService extends IService<Pet> {
     boolean deleteByIds(String ids);
     void updateUseful(Integer petId);
     void addAccessCount(Integer id);
+    List<Pet> getPetByShopId(Integer shopId);
 }
