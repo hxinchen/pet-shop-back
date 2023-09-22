@@ -23,6 +23,8 @@ public interface ProductService extends IService<Product> {
 
     Page<Product> getByCategory(Integer pageNum, Integer pageSize, Integer category);
 
+    Page<Product> getByShop(Integer pageNum, Integer pageSize, Integer category);
+
     boolean deleteByIds(String ids);
 
     List<Integer> getShopIds(String ids);

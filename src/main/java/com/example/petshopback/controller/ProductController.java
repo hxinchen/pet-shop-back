@@ -116,6 +116,15 @@ public class ProductController {
         return getProduct(result, page);
     }
 
+    // 按商店查询产品
+    @GetMapping("/getByShop")
+    public Result getByShop(Integer pageNum, Integer pageSize, Integer category) {
+        Result result = new Result();
+        Page<Product> page = productService.getByShop(pageNum, pageSize, category);
+
+        return getProduct(result, page);
+    }
+
     // 修改周边产品信息
     @PostMapping("/modify")
     public Result modify(@RequestBody Product product) {
