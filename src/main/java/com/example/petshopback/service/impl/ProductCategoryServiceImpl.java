@@ -2,15 +2,24 @@ package com.example.petshopback.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.petshopback.entity.OrderItem;
 import com.example.petshopback.entity.PetCategory;
+import com.example.petshopback.entity.Product;
 import com.example.petshopback.entity.ProductCategory;
 import com.example.petshopback.mapper.ProductCategoryMapper;
+import com.example.petshopback.service.OrderItemService;
 import com.example.petshopback.service.ProductCategoryService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.petshopback.service.ProductService;
+import com.example.petshopback.utils.Result;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -22,6 +31,13 @@ import java.util.List;
  */
 @Service
 public class ProductCategoryServiceImpl extends ServiceImpl<ProductCategoryMapper, ProductCategory> implements ProductCategoryService {
+
+    @Autowired
+    private OrderItemService orderItemService;
+    @Autowired
+    @Lazy
+    private ProductService productService;
+
     @Override
     public List<ProductCategory> getAllCate() {
 
@@ -116,5 +132,34 @@ public class ProductCategoryServiceImpl extends ServiceImpl<ProductCategoryMappe
             listIds.add(id);
         }
         return this.removeByIds(listIds);
+    }
+    @Override
+    public Map<String, List<String>> getCategoryData() {
+        Map<String, List<String>> result = new HashMap<>();
+        List<String> data = new ArrayList<>();
+        List<String> name = new ArrayList<>();
+        List<ProductCategory> categories = this.list();
+
+        for (ProductCategory productCategory : categories) {
+            data.add("0.0"); // 初始值为 "0.0"
+            name.add(productCategory.getName());
+        }
+
+        List<OrderItem> orderItems = orderItemService.list();
+        for (OrderItem orderItem : orderItems) {
+            // 根据 orderItem 中的 productId 获取对应的产品信息
+            Product product = productService.getById(orderItem.getProductId());
+
+            if (product != null) {
+                // 在上面的 List 中增加对应类别的数量
+                int categoryId = product.getCategoryId();
+                double sum = Double.parseDouble(data.get(categoryId)) + orderItem.getCount() * product.getPrice();
+                data.set(categoryId, String.valueOf(sum));
+            }
+        }
+
+        result.put("data", data);
+        result.put("name", name);
+        return result;
     }
 }
