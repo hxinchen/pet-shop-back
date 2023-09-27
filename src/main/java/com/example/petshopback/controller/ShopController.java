@@ -89,12 +89,17 @@ public class ShopController {
             result.success("查询成功");
             for (int i=0; i < page.getRecords().size(); i++) {
                 page.getRecords().get(i).put("userName",userService.getById(page.getRecords().get(i).getUserId()).getUsername());
-                if(Objects.equals(page.getRecords().get(i).getUserId(), userId)) {
-                    //排除其他用户的商店
+                if(!userService.getById(userId).getIsAdmin()){
+                    if(Objects.equals(page.getRecords().get(i).getUserId(), userId)) {
+                        //排除其他用户的商店
+                        list.add(page.getRecords().get(i));
+                    }
+                }else{
                     list.add(page.getRecords().get(i));
                 }
             }
             //把list的结果放到page里面
+
             page.setRecords(list);
             result.setData(page);
         }
