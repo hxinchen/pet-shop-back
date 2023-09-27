@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -120,4 +121,12 @@ public class ProductCategoryController {
         return result;
     }
 
+    @GetMapping("/getCategoryData")
+    public Result<Map<String,List<String>>> getCategoryData() {
+        Result<Map<String,List<String>>> result = new Result<>();
+        result.setData(productCategoryService.getCategoryData());
+            result.success("获得数据成功");
+
+        return result;
+    }
 }
