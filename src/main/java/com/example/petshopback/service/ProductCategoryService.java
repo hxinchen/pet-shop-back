@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.petshopback.entity.PetCategory;
 import com.example.petshopback.entity.ProductCategory;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.petshopback.utils.Result;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -30,4 +32,6 @@ public interface ProductCategoryService extends IService<ProductCategory> {
     Page<ProductCategory> getAllPageCate(Integer pageNum, Integer pageSize);
 
     boolean deleteByIds(String ids);
+
+    Map<String,List<String>> getCategoryData();
 }
