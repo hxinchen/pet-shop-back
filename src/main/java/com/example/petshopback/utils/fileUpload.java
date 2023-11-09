@@ -10,13 +10,13 @@ import java.io.InputStream;
 import java.util.UUID;
 public class fileUpload {
 
-    private String endpoint="oss-cn-fuzhou.aliyuncs.com";
+    private String endpoint="xxx";
 
-    private String accessKeyId="LTAI5tKLA439j5t8FN3iYMHx";
+    private String accessKeyId="xxx";
 
-    private String secret="RxDOWQDygC3ixebKY5tTuyEYS7p0o2";
+    private String secret="xxx";
 
-    private String bucket="hxc-picture";
+    private String bucket="xxx";
 
     public String upload(MultipartFile file) {
         // Endpoint以华东1（杭州）为例，其它Region请按实际情况填写
